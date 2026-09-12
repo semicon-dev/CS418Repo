@@ -1,0 +1,16 @@
+09 / 09 / 26 - - 
+> Given commandline arguement
+
+> The C++ "not directly used" error can be ignored
+
+> I need to get into docker for creating some level of virtualization for these projects bro
+
+> Had to use sudo apt install libpng-dev. I hope this one works fine. I should 
+run like a test on the lightweigth wrapper tonight and just see if it works
+
+> "implicitly declared constructor" means that I didn't include the constructor
+in the header defintion
+
+> Ahhhhhh that was my issue! I forgot to include it within my copmilitiaotn bash script
+
+Ok, Lets actually add this to my github

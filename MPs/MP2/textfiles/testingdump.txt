@@ -1,0 +1,15 @@
+// > Testing making colored png  - - I screwed up regarding alpha channel (init to 0, 0% opaque)
+
+    // > Test wraooer - - -
+    Image img = Image(100, 100) ; 
+    for(int i = 0 ; i < 100 ; i ++){
+        for(int j = 0 ; j < 100  ; j ++){
+            img[i][j].red = 255 ; 
+            img[i][j].green = 255 ; 
+            img[i][j].blue = 1 ; 
+            img[i][j].alpha = 255 ;
+        }
+    }
+    img.save("testimg.png") ; 
+
+    

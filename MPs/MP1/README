@@ -1,0 +1,23 @@
+09 / 1 / 26 - - -
+GENERAL TROUBLESHOOTING AND ASSIGNMENT NOTES - - -
+--------------------------------------------------
+
+> Regarding the HTML File, it looks like we open a "parentheses like syntax"
+with <head> and close with </head> or <body> / </body>
+
+> Alright, now I need some help running an HTML file, there is a wikihow on this!
+
+> I hope it isn't too different on Linux
+
+> Alright, I can just type in terminal "firefox 2.4_HTMLBoilerplate.html"
+
+> I am able to get the yellow square, but I am unable to see the little red dots
+
+> Lets scrounge around on the website and see if I can find anything
+
+> It looks like the document on Handling CORS errors has my issue, as I am 
+trying to run this through the file:// scheme
+
+> Ok, I need to run a local webserver, Ill use python as I am most familiar with it, 
+
+> However, I also should go back at some point and do the JS one. 
