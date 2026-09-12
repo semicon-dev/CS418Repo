@@ -9,7 +9,7 @@
 imgData::imgData(){
     printf("imgData Constructor Called \n") ; 
 
-    n = 0 ; 
+     
     errorCode = 0 ; 
     /* 
     0 no error
@@ -155,7 +155,7 @@ imgData iLoveParsingFiles(std::string filepath){
                 if(curChar == ' '){continue ;}
                 subString += curChar ;
             }
-            retData.n = std::stoi(subString) ; 
+            retData.nVec.push_back(std::stoi(subString)) ; 
             
             continue ; 
         }

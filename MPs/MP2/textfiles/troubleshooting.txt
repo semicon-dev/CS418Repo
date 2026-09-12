@@ -13,4 +13,5 @@ in the header defintion
 
 > Ahhhhhh that was my issue! I forgot to include it within my copmilitiaotn bash script
 
-Ok, Lets actually add this to my github
+Ok, Lets actually add this to my github, done, only issue is I now need to remove the fucking .venv
+Why the fuck did I include the venv Im so fuckign stupid

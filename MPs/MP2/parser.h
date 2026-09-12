@@ -9,7 +9,7 @@ class imgData {
     // > Members
     std::vector<int> colorVec ;
     std::vector<int> posVec ; 
-    int n ; // > Number of pixels to draw - - -
+    std::vector<int> nVec ; // > Number of pixels to draw - - -
     int errorCode ; 
     int w, h ; 
     std::string imgName ; 

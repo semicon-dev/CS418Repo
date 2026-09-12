@@ -13,3 +13,19 @@
     img.save("testimg.png") ; 
 
     
+
+    // >Ok, lets see if we can retrieve position data
+    // printf("Returned from parsing \n") ; 
+    // printf("POSITION TEST \n") ;
+    // for(int i = 0 ; i < data.posVec.size() ; i ++){
+    //     printf("%d ", data.posVec[i]) ; 
+    // }
+    // printf("\n") ; 
+
+    // printf("COLOR TEST\n") ;
+    // for(int i = 0 ; i < data.colorVec.size() ; i ++){
+    //     printf("%d ", data.colorVec[i]) ; 
+    // }
+    // printf("\n") ;
+
+    // printf("NUMPIX : %d \n", data.n) ; 
