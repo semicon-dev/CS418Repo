@@ -15,3 +15,7 @@ in the header defintion
 
 Ok, Lets actually add this to my github, done, only issue is I now need to remove the fucking .venv
 Why the fuck did I include the venv Im so fuckign stupid
+
+> Ok, lets fix this make file version up - - -
+----------------------------------------------
+>
