@@ -1,0 +1,7 @@
+# DDA in R3 test
+# Given set of vectors <x,y,z,w>
+# Not too sure what do with the z vector yet
+# w is distance into camera. Div by w to project 
+png 100 100
+p 24 29
+p 90 41

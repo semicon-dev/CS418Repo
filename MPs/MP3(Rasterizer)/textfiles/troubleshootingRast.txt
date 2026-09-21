@@ -1,0 +1,13 @@
+09 / 20 / 26 - - -
+>Lets first get rast-gray.txt output working
+> This should provide a good framework for everything else
+> Verify rast-gray.txt via hand calcs to make sure I understand the process
+> rast-gray.txt seems to include special instructions on how to get things working
+
+Review on Input Keywords - - -
+(1) png keyword will always be first
+(2) mode setting is optional, precedes any data or drawing Keywords
+(3) Drawing occurs after data. May be interleaved with drawing
+(4) Drawing draws all current provided data up to a certain point 
+
+Need to check if prevchar was a space as well

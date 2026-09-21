@@ -23,3 +23,17 @@ Why the fuck did I include the venv Im so fuckign stupid
 > I was able to write for(int j ; j < etc . . .), i noramlly do init these things
 > However, Id forgotten this time. The segfault came from my lack of initialization of
 > prevNum, which I have now set to zero, and this gets rid of the segfault
+
+09 / 20 / 26 - - - MP3 - - - Rasterizer
+> I am keeping this general project setup and planning to add onto it / build onto it
+for the Rasterizer MP, as it generally seems to have a lot of the image reading components 
+already built in that will be necessary for this next project
+> I have changed some things around such that my workspace doesn't get too cluttered
+> Because of this, all output files will go to the "outputs" directory. 
+> Running things will now take ./outputs/run.out ./tests/input.txt etc
+
+Afternoon 09 / 20 / 26 - - - 
+
+> Let's get rast gray working first
+
+> 

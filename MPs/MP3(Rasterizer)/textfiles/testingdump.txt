@@ -1,0 +1,63 @@
+// > Testing making colored png  - - I screwed up regarding alpha channel (init to 0, 0% opaque)
+
+    // > Test wraooer - - -
+    Image img = Image(100, 100) ; 
+    for(int i = 0 ; i < 100 ; i ++){
+        for(int j = 0 ; j < 100  ; j ++){
+            img[i][j].red = 255 ; 
+            img[i][j].green = 255 ; 
+            img[i][j].blue = 1 ; 
+            img[i][j].alpha = 255 ;
+        }
+    }
+    img.save("testimg.png") ; 
+
+    
+
+    // >Ok, lets see if we can retrieve position data
+    // printf("Returned from parsing \n") ; 
+    // printf("POSITION TEST \n") ;
+    // for(int i = 0 ; i < data.posVec.size() ; i ++){
+    //     printf("%d ", data.posVec[i]) ; 
+    // }
+    // printf("\n") ; 
+
+    // printf("COLOR TEST\n") ;
+    // for(int i = 0 ; i < data.colorVec.size() ; i ++){
+    //     printf("%d ", data.colorVec[i]) ; 
+    // }
+    // printf("\n") ;
+
+    // printf("NUMPIX : %d \n", data.n) ; 
+
+
+int createImage(imgData data){
+    // printf("Entering createImage \n") ; 
+    if(data.w == 0 || data.h == 0){return 1 ; } // Image size wrong
+    Image newImg = Image(data.w, data.h) ; 
+    int posX, posY ; 
+    int prevNum = 0 ; // > For storing the last number of points written
+    // > Check data formatting
+    // printf("createImage Checkpoint 1\n") ; // > DEBUG~~
+    if((data.posVec.size() % 2) != 0){return 2 ; } // Size format error
+    if((data.colorVec.size() % 4) != 0 ){return 3 ; } // Color format error
+    // printf("createImage Checkpoint  2 \n") ; // > DEBUG~~
+    for(int j = 0  ; j < data.nVec.size() ; j ++){
+        // printf("createImage Checkpoint   3\n") ; // > DEBUG~~
+        for(int i = 0 ; i < data.nVec[j] ; i ++){
+            posX = data.posVec[i*2 + prevNum*2] ; 
+            posY = data.posVec[i*2 + 1 + prevNum*2] ;
+            newImg[posY][posX].red = data.colorVec[i*4] ; 
+            newImg[posY][posX].green = data.colorVec[i*4+1] ; 
+            newImg[posY][posX].blue = data.colorVec[i*4+2] ; 
+            newImg[posY][posX].alpha = data.colorVec[i*4+3] ; 
+            // printf("createImage Checkpoint for i : %d j : %d \n", i , j) ; // > DEBUG~~
+        }
+        prevNum = data.nVec[j] ; 
+    }
+    // printImageData(data.w, data.h, newImg) ; / > TS doesn't work. I cant seem to access pixel values
+    std::string locationSaveString = "./outputs/" + data.imgName ;
+    newImg.save(locationSaveString.c_str()) ; 
+    // printf("createImage Checkpoint Final\n") ; // > DEBUG~~
+    return 0 ; 
+}

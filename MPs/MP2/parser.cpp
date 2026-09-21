@@ -7,7 +7,7 @@
 
 // > Constructor
 imgData::imgData(){
-    printf("imgData Constructor Called \n") ; 
+    // printf("imgData Constructor Called \n") ; 
 
      
     errorCode = 0 ; 
@@ -161,8 +161,6 @@ imgData iLoveParsingFiles(std::string filepath){
         }
         
     }
-
-
 
     // > Close file
     data_file.close() ; 
