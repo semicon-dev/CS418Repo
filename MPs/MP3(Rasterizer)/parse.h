@@ -8,9 +8,10 @@
 // > MACROS
 #define ATTRIBUTE_VEC_SIZE 10
 
-struct vertexAttributes {
+struct vertexAttributes { // > This may have been a stupid fucking design decision
     double arr[ATTRIBUTE_VEC_SIZE] ;
 } ;
+
 
 // > Create a struct for holding data
 class dataState {
@@ -24,6 +25,14 @@ class dataState {
 
     // > Populate this
     std::vector<vertexAttributes> vertexArr ; // > Array of all verties to draw
+    std::vector<std::vector<double>> posVec ; 
+    std::vector<std::vector<double>> colorVec ; 
+    std::vector<std::vector<double>> texVec ; 
+
+    // > Set of vectors 
+    std::vector<std::vector<double>> posVecW ; 
+    std::vector<std::vector<double>> colorVecW ; 
+    std::vector<std::vector<double>> texVecW ; 
 
     // > Modes
     bool depth ; 
@@ -32,7 +41,7 @@ class dataState {
     int fsaa ; 
     bool cull ; 
     bool decals ;
-    bool frustum ; 
+    bool frustum ; // > Clipping
 
     // > Sizes
     int posSize ; 
@@ -42,10 +51,23 @@ class dataState {
     
     // > Methods
     dataState() ; // > Constructor
+    void saveImage() ;
     
 
 } ;
 
+
+class vecState {
+    public :
+    // > Set of vectors 
+   std::vector<double> pos ; 
+   std::vector<double> color ; 
+   std::vector<double> tex ;
+
+    // > Methods
+    vecState() ;
+    void populateSimple(int offset, const dataState & state) ;
+};
 
 // > Functions
 

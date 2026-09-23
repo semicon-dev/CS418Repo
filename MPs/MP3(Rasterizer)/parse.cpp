@@ -1,6 +1,8 @@
-#include "parse.h"
-#include "operations.h"
 #include <string>
+#include "operations.h"
+#include "draw.h"
+#include "parse.h"
+
 // Functions for imgData class
 
 // > Constructor
@@ -9,7 +11,7 @@ dataState::dataState(){
     // > Set state
     depth = false ;
     sRGB = true ;
-    hyp = true ; 
+    hyp = false ; // > At least by default, for the first couple
     fsaa = 0 ; 
     cull = false ;
     decals = false ; 
@@ -21,24 +23,19 @@ dataState::dataState(){
     ptSize = 0 ; 
 }
 
-// > Vector Print Helper
-void printVec(std::vector<double> vec){
-    for(int i = 0 ; i < vec.size() ; i ++){
-        printf("Item : %f \n", vec[i] ) ; 
-    }
-    return ; 
+void dataState::saveImage(){
+    return ;
 }
-// > Nested Print Helper
-void printVecNest(std::vector< std::vector<double> > vec){
 
-    for(int i = 0 ; i < (vec.size()) ; i ++){
-        printf("vec ") ; 
-        for(int j = 0 ; j < vec[i].size() ; j++){
-            printf("%f ", vec[i][j]) ; 
-        }
-        printf("\n") ; 
-    }
+vecState::vecState(){
+    return ;
+}
 
+// > No div W for color, no texture
+void vecState::populateSimple(int offset, const dataState & state){
+    // printf("Entered populateSimple : offset : %d \n", offset) ; // > DEBUG 
+    pos = state.posVecW[offset] ;
+    color = state.colorVec[offset] ;
 }
 
 // > Basic line parsing for multiple coordinates
@@ -51,15 +48,17 @@ std::vector< std::vector<double> > parseNumberLine(int coordSize, int stringOffs
 
     // > Parse data
     int it = stringOffset ; // > Track how far into string we are
-    int numberCount = 0 ; // > Track number of non space characters we have seen
+    bool seen = false ; // > Track number of non space characters we have seen
     curChar = curLine[it] ; // > 
     while(curChar != '\0'){
         curChar = curLine[it] ; it ++ ; 
         if(curChar == ' '){ // We've reached a space
             if(curLine[it - 2] == ' '){ continue; } // > If simply stepping through spaces, get next char
             else{ // > we have reached the end of a number
+                if(!seen){seen = true ; continue ;}
+                // printf("substring to stod : %s \n", subString.c_str()) ; //!!DEBUG
                 saveVector.push_back(std::stod(subString)) ;
-                subString.clear() ; // > Clear substring
+                subString.clear() ; // > Clear substring 
                 continue ;
             }   
         }
@@ -82,7 +81,7 @@ std::vector< std::vector<double> > parseNumberLine(int coordSize, int stringOffs
 
 int parseFile(std::string filepath){
     // Create state variable - - - 
-    dataState curDS ;
+    dataState curDS ; // > Current data state variable
 
     // Read file - - -
     std::ifstream dataFile(filepath) ; 
@@ -143,26 +142,36 @@ int parseFile(std::string filepath){
 
     // > Main Data Retrieval Loop
     // - - - - - - - - - - - - - - - - - - -
-    struct vertexAttributes curVXAT ; 
+    // struct vertexAttributes curVXAT ; 
     std::vector<std::vector<double>> dataVector ; // for storing space separated values neatly
     int kMod = 0 ; // > Keyword modifier
     int kMod2 = 0 ; // > Potential other keyword modifier
-    clearVXAT(curVXAT) ; // > Pass by reference
+    // clearVXAT(curVXAT) ; // > Pass by reference
     
     while(std::getline(dataFile, curLine)){
 
         // > POSITION
         if(curLine.substr(0,8) == "position"){
+            //printf("Entered Position\n") ; //!!DEBUG
             // Find size
             kMod = std::stoi(curLine.substr(9,10)) ; 
+            // printf("kmod = %d\n", kMod) ; //!!DEBUG
             curDS.posSize = kMod ;
             dataVector = parseNumberLine(kMod, 10, curLine) ; 
-            // > Place data into VXAT in curDS
+            // > Place data into position vector
+            curDS.posVec = dataVector ;
+            //printf("Completed Position\n") ; //!!DEBUG
             continue ;
         }
 
         // > COLOR
         if(curLine.substr(0,5) == "color"){
+            //printf("Entered Color \n") ; //!!DEBUG
+            kMod = std::stoi(curLine.substr(6,7)) ;
+            curDS.colorSize = kMod ; 
+            dataVector = parseNumberLine(kMod, 7, curLine) ;
+            //printf("Completed Color\n") ;//!!DEBUG
+            curDS.colorVec = dataVector ; 
             continue ;
         }
 
@@ -183,6 +192,12 @@ int parseFile(std::string filepath){
 
         // > DRAWARRAYSTRIANGLES
         if(curLine.substr(0,19) == "drawArraysTriangles"){
+            kMod = std::stoi(curLine.substr(20, 21)) ;
+            kMod2 = std::stoi(curLine.substr(22, 23)) ; 
+            // printf("Breakpoint 1 \n") ; //!!DEBUG
+            drawArraysTrianglesBasic(kMod, kMod2, curDS) ; 
+            curDS.saveImage() ;
+            // printVecNest(curDS.posVecW) ;
             continue ;
         }
 
@@ -202,6 +217,9 @@ int parseFile(std::string filepath){
 
     
     dataFile.close() ;
+    // printVecNest(curDS.posVec) ;
+    // printf("colors : \n") ; 
+    // printVecNest(curDS.colorVec) ;
     return 0 ; 
 }
 

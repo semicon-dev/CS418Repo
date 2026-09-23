@@ -11,3 +11,12 @@ Review on Input Keywords - - -
 (4) Drawing draws all current provided data up to a certain point 
 
 Need to check if prevchar was a space as well
+
+> Ok, how am I going to resolve these fucking include errors
+> Forward class and struct declarations seem to be my best bet !
+> Yes, RULE : include headers within .cpp files, forward declare classes and functions
+
+09 / 21 / 2026 - - - 
+> Made a mistake in declaring a function once without reference and then defining it with the (correct) 
+by reference passage
+> New error indexing nested arrays, need to pusback

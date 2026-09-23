@@ -18,3 +18,5 @@ drawArraysTriangles 0 3
 
 drawArraysTriangles 1 3
 # last draw goes on top of first draw (because no depth buffer)
+# Hyperbolic is initially false, which means that we initlaly do not need to worry
+#about perspective correct color and texture interpolation
