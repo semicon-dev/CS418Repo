@@ -33,8 +33,12 @@ vecState::vecState(){
 
 // > No div W for color, no texture
 void vecState::populateSimple(int offset, const dataState & state){
-    // printf("Entered populateSimple : offset : %d \n", offset) ; // > DEBUG 
+    //printf("Entered populateSimple : offset : %d  \n", offset) ; // > DEBUG 
+    //int size = (int)((state.posVecW).size()) ; // DEBUG
+    //printf("Posvec size : %d \n", size) ; //DEBUG
+    
     pos = state.posVecW[offset] ;
+    //printf("test \n") ;
     color = state.colorVec[offset] ;
 }
 

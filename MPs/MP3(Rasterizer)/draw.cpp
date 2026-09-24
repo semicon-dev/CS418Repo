@@ -20,14 +20,18 @@ void DDABasic(dataState & state){
 std::vector<vecState> findTMB(const dataState & state, int offset){
 
     // printf("Entered findTBM \n") ; // > DEBUG
+    printf(" FIND TMB ENTERED \n") ; // > DEBUG
 
     std::vector<vecState> retVec ; 
     int realOffset = 3 * offset ;
-
+    
     // > Init vecs
     vecState t_vec ; t_vec.populateSimple(realOffset , state) ;
+
     vecState b_vec ; b_vec.populateSimple(realOffset + 1  , state) ; 
+
     vecState m_vec ; m_vec.populateSimple(realOffset + 2 , state) ;
+
 
     vecState temp_vec ;
 
@@ -64,12 +68,14 @@ std::vector<vecState> findTMB(const dataState & state, int offset){
     std::reverse(retVec.begin(), retVec.end()) ;
     // printf("Print Vecs\n") ;// DEBUG
     // printSimpleVecs(retVec, true, true, false) ;
+    
     return retVec ; 
 }
 
 // > No alpha channel, no color / texture interpolation
 void scanLineBasic(dataState & state){
 std::vector<vecState> TMB = findTMB(state, 0) ;
+
 
 // > Set up line from t to b
 // - - - - - - - - - - - - -
@@ -81,8 +87,8 @@ double e_tb_scalar = std::ceil(TMB[0].pos[1]) - TMB[0].pos[1];
 vecState o_tb_vec = scaleVec(s_tb_vec, e_tb_scalar) ;
 vecState p_tb_point = addVecs(TMB[0], o_tb_vec, false) ;
 
-//printf("P vec\n") ; // DEBUG
-// printSimpleVec(s_tb_vec, true, false, false) ;
+// printf("P vec\n") ; // DEBUG
+printSimpleVec(s_tb_vec, true, false, false) ;
 
 // > Set up line from t to m
 vecState delta_tm_vec = subVecs(TMB[1], TMB[0], false) ;
@@ -91,11 +97,10 @@ double e_tm_scalar = std::ceil(TMB[0].pos[1]) - TMB[0].pos[1] ;
 vecState o_tm_vec = scaleVec(s_tm_vec, e_tm_scalar) ;
 vecState p_tm_point = addVecs(TMB[0], o_tm_vec, false) ;
 
-
 // printf("Print TB point 1\n") ; // DEBUG
 // printSimpleVec(p_tb_point, true, false, false) ; // > Debug
 // printf("Print TM point 1\n") ; // DEBUG
-// printSimpleVec(p_tm_point, true, false, false) ; // > Debug
+printSimpleVec(p_tm_point, true, false, false) ; // > Debug
 
 // > Run DDA in x loop # 1
 vecState a_point = p_tm_point ; // > For notational consistency
@@ -106,6 +111,7 @@ vecState s_x_vec ;
 double e_x_scalar ;
 vecState o_x_vec ;
 vecState p_x_point ;
+
 
 while(p_tm_point.pos[1] < TMB[1].pos[1]){ // While p[y] < m[y]
     if(p_tm_point.pos[0] == p_tb_point.pos[0]){ // > If x values are the same
@@ -124,10 +130,13 @@ while(p_tm_point.pos[1] < TMB[1].pos[1]){ // While p[y] < m[y]
 
     // > begin drawing points
     while(p_x_point.pos[0] < b_point.pos[0]){
+        // > Draw point
         
+        (*state.img)[(int)p_x_point.pos[1]][(int)p_x_point.pos[0]].red = 1 ;
+        //printf("Print Simple Vec integer test \n") ; 
+        // printSimpleVec(p_x_point, true, false, false) ; // > DEBUG
     }
-
-
+    
 }
 
 

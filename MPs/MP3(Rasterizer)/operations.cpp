@@ -108,21 +108,22 @@ void divByWViewportBasic(dataState & state){
     // Divide positions by W
     std::vector<double> curVec ;
     double curW ; 
-    state.posVec = state.posVec ;
+    state.posVecW = state.posVec ;
     for(int i = 0 ; i < state.posVec.size() ; i ++){
         curW = state.posVec[i][3] ; 
         // printf("It : %d \n", i) ; //!!DEBUG
-        state.posVec[i][3] = 1 / curW ; 
+        state.posVecW[i][3] = 1 / curW ; 
         for(int j = 0 ; j < state.posVec[i].size() -1 ; j ++){
-            state.posVec[i][j] = state.posVec[i][j] / curW ; 
+            state.posVecW[i][j] = state.posVec[i][j] / curW ; 
         }
     }
     // Transform position coords to viewport (x,y) only 
     for(int i = 0 ; i < state.posVec.size() ; i++){
-            state.posVec[i][0] = (state.posVec[i][0] + 1) * state.wPix / 2 ;
-            state.posVec[i][1] = (state.posVec[i][1] + 1) * state.hPix / 2 ;
+            state.posVecW[i][0] = (state.posVecW[i][0] + 1) * state.wPix / 2 ;
+            state.posVecW[i][1] = (state.posVecW[i][1] + 1) * state.hPix / 2 ;
     }
-
+    printVecNest(state.posVecW) ;
+    
 }
 
 
