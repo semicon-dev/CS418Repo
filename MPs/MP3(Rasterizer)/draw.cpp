@@ -6,12 +6,23 @@
 #include <vector>
 #include <algorithm>
 
+
+// > Go down moses, Paul Robeson
+
 // > Helper Drawing Functions
 
 void colorPixelBasic(dataState & state){
 
 }
-void DDABasicOverX(dataState & state){
+void DDABasicOverX(dataState & state, vecState a_point, vecState b_point){
+
+    // > Declare vectors for drawing
+    vecState delta_x_vec ;
+    vecState s_x_vec ; 
+    double e_x_scalar ;
+    vecState o_x_vec ;
+    vecState p_x_point ;
+
 
 }
 
@@ -121,6 +132,7 @@ while(p_tm_point.pos[1] < TMB[1].pos[1]){ // While p[y] < m[y]
         a_point = p_tb_point ;
         b_point = p_tm_point ;
     }
+
     // > Find first potential point - - -
     delta_x_vec = subVecs(b_point, a_point, false) ;
     s_x_vec = scaleVec(delta_x_vec, 1 / delta_x_vec.pos[0]) ;

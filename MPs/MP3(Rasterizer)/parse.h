@@ -65,6 +65,8 @@ class vecState {
    std::vector<double> color ; 
    std::vector<double> tex ;
 
+   bool isPoint ;
+   
     // > Methods
     vecState() ;
     void populateSimple(int offset, const dataState & state) ;

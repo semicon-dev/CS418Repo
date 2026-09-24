@@ -29,6 +29,7 @@ void dataState::saveImage(){
 }
 
 vecState::vecState(){
+    isPoint = false ;
     return ;
 }
 
