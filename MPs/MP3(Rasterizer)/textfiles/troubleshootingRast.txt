@@ -20,3 +20,8 @@ Need to check if prevchar was a space as well
 > Made a mistake in declaring a function once without reference and then defining it with the (correct) 
 by reference passage
 > New error indexing nested arrays, need to pusback
+
+09 / 24 / 2026 - - -
+Running into issues currently with the scanline algorithm on drawing the bottom half of the triangle
+
+

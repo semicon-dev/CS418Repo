@@ -11,8 +11,8 @@ int main(int argc, char* argv[]){
     // >  printf("Testing : %s \n", filename.c_str()) ; // > ~~DEBUG~~
 
     // > Parse File
-    int cumfuck = parseFile(filepath) ; 
-    if(cumfuck != 0){
+    int ret = parseFile(filepath) ; 
+    if(ret != 0){
         printf("Idk but you fucked up lol \n") ; 
     }
 

@@ -24,6 +24,7 @@ dataState::dataState(){
 }
 
 void dataState::saveImage(){
+    (*img).save("./outputs/test.png") ;
     return ;
 }
 
@@ -196,11 +197,11 @@ int parseFile(std::string filepath){
 
         // > DRAWARRAYSTRIANGLES
         if(curLine.substr(0,19) == "drawArraysTriangles"){
-            kMod = std::stoi(curLine.substr(20, 21)) ;
-            kMod2 = std::stoi(curLine.substr(22, 23)) ; 
+            kMod = std::stoi(curLine.substr(20, 21)) ; // Offset
+            kMod2 = std::stoi(curLine.substr(22, 23)) ; // Count
             // printf("Breakpoint 1 \n") ; //!!DEBUG
+            printf("kmod first : %d kmod2 count : %d \n ", kMod, kMod2) ;
             drawArraysTrianglesBasic(kMod, kMod2, curDS) ; 
-            curDS.saveImage() ;
             // printVecNest(curDS.posVecW) ;
             continue ;
         }
@@ -219,11 +220,13 @@ int parseFile(std::string filepath){
 
     }
 
-    
+    printf("reached end \n") ;
     dataFile.close() ;
     // printVecNest(curDS.posVec) ;
     // printf("colors : \n") ; 
     // printVecNest(curDS.colorVec) ;
+    curDS.saveImage() ;
+    // free(curDS.img) ;// > This should work
     return 0 ; 
 }
 
