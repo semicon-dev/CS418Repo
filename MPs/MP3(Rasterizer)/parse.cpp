@@ -201,7 +201,7 @@ int parseFile(std::string filepath){
             kMod = std::stoi(curLine.substr(20, 21)) ; // Offset
             kMod2 = std::stoi(curLine.substr(22, 23)) ; // Count
             // printf("Breakpoint 1 \n") ; //!!DEBUG
-            printf("kmod first : %d kmod2 count : %d \n ", kMod, kMod2) ;
+            // printf("kmod first : %d kmod2 count : %d \n ", kMod, kMod2) ;
             drawArraysTrianglesBasic(kMod, kMod2, curDS) ; 
             // printVecNest(curDS.posVecW) ;
             continue ;
@@ -221,7 +221,7 @@ int parseFile(std::string filepath){
 
     }
 
-    printf("reached end \n") ;
+    printf("Reached End Successfully \n") ;
     dataFile.close() ;
     // printVecNest(curDS.posVec) ;
     // printf("colors : \n") ; 
