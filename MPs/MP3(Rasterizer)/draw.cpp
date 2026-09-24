@@ -20,7 +20,7 @@ void DDABasic(dataState & state){
 std::vector<vecState> findTMB(const dataState & state, int offset){
 
     // printf("Entered findTBM \n") ; // > DEBUG
-    printf(" FIND TMB ENTERED \n") ; // > DEBUG
+    // printf(" FIND TMB ENTERED \n") ; // > DEBUG
 
     std::vector<vecState> retVec ; 
     int realOffset = 3 * offset ;
@@ -88,7 +88,7 @@ vecState o_tb_vec = scaleVec(s_tb_vec, e_tb_scalar) ;
 vecState p_tb_point = addVecs(TMB[0], o_tb_vec, false) ;
 
 // printf("P vec\n") ; // DEBUG
-printSimpleVec(s_tb_vec, true, false, false) ;
+// printSimpleVec(s_tb_vec, true, false, false) ;
 
 // > Set up line from t to m
 vecState delta_tm_vec = subVecs(TMB[1], TMB[0], false) ;
@@ -100,7 +100,7 @@ vecState p_tm_point = addVecs(TMB[0], o_tm_vec, false) ;
 // printf("Print TB point 1\n") ; // DEBUG
 // printSimpleVec(p_tb_point, true, false, false) ; // > Debug
 // printf("Print TM point 1\n") ; // DEBUG
-printSimpleVec(p_tm_point, true, false, false) ; // > Debug
+// printSimpleVec(p_tm_point, true, false, false) ; // > Debug
 
 // > Run DDA in x loop # 1
 vecState a_point = p_tm_point ; // > For notational consistency
@@ -130,15 +130,30 @@ while(p_tm_point.pos[1] < TMB[1].pos[1]){ // While p[y] < m[y]
 
     // > begin drawing points
     while(p_x_point.pos[0] < b_point.pos[0]){
-        // > Draw point
-        
-        (*state.img)[(int)p_x_point.pos[1]][(int)p_x_point.pos[0]].red = 1 ;
-        //printf("Print Simple Vec integer test \n") ; 
-        // printSimpleVec(p_x_point, true, false, false) ; // > DEBUG
+
+        // > Draw point on image
+        (*state.img)[(int)p_x_point.pos[1]][(int)p_x_point.pos[0]].red = (int)255*p_x_point.color[0] ;
+        (*state.img)[(int)p_x_point.pos[1]][(int)p_x_point.pos[0]].green = (int)255*p_x_point.color[1] ;
+        (*state.img)[(int)p_x_point.pos[1]][(int)p_x_point.pos[0]].blue = (int)255*p_x_point.color[2] ;
+        if(state.colorSize == 4){
+        (*state.img)[(int)p_x_point.pos[1]][(int)p_x_point.pos[0]].alpha = (int)255*p_x_point.color[3] ;
+        }
+        printf("Point we are drawing now : \n") ; 
+        printSimpleVec(p_x_point, true, false, false) ; // > DEBUG
+        p_x_point = addVecs(p_x_point, s_x_vec, false) ;
     }
+    // > Update edge points
+    p_tb_point = addVecs(p_tb_point, s_tb_vec, false) ;
+    p_tm_point = addVecs(p_tm_point, s_tm_vec, false) ;
+    
+    // > update a and b vectors!
+    a_point = p_tm_point ; 
+    b_point = p_tb_point ;
+
     
 }
-
+printf("To return from drawing! \n") ;
+return ; //DEBUG RETURN AFTER FIRST DRAW!!
 
 }
 

@@ -42,6 +42,7 @@ class dataState {
     bool cull ; 
     bool decals ;
     bool frustum ; // > Clipping
+    bool alpha ;
 
     // > Sizes
     int posSize ; 

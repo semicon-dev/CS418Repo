@@ -122,7 +122,7 @@ void divByWViewportBasic(dataState & state){
             state.posVecW[i][0] = (state.posVecW[i][0] + 1) * state.wPix / 2 ;
             state.posVecW[i][1] = (state.posVecW[i][1] + 1) * state.hPix / 2 ;
     }
-    printVecNest(state.posVecW) ;
+    // printVecNest(state.posVecW) ;
     
 }
 
