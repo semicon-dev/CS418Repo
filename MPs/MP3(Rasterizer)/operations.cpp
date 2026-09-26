@@ -6,14 +6,14 @@
 // > Debugging helpers - - - 
 
 // > Vector Print Helper
-void printVec(std::vector<double> vec){
+void printVector(std::vector<double> vec){
     for(int i = 0 ; i < vec.size() ; i ++){
         printf("Item : %f \n", vec[i] ) ; 
     }
     return ; 
 }
 // > Nested Print Helper
-void printVecNest(std::vector< std::vector<double> > vec){
+void printVectorNest(std::vector< std::vector<double> > vec){
 
     for(int i = 0 ; i < (vec.size()) ; i ++){
         printf("vec ") ; 
@@ -28,18 +28,18 @@ void printVecNest(std::vector< std::vector<double> > vec){
 void printSimpleVec(vecState state, bool pos, bool color, bool tex){
     if(pos){
             printf("pos \n") ; 
-            printVec(state.pos) ;
+            printVector(state.pos) ;
     }
 
     if(color){
             printf("color \n") ; 
-            printVec(state.color) ;
+            printVector(state.color) ;
 
     }
 
     if(tex){
             printf("tex \n") ; 
-            printVec(state.tex) ;
+            printVector(state.tex) ;
     }
 }
 
@@ -49,50 +49,22 @@ void printSimpleVecs(std::vector<vecState> vec, bool pos, bool color, bool tex){
         printf("Point %d \n", i) ;
         if(pos){
             printf("pos \n") ; 
-            printVec(vec[i].pos) ;
+            printVector(vec[i].pos) ;
         }
         if(color){
             printf("color \n") ; 
-            printVec(vec[i].color) ;
+            printVector(vec[i].color) ;
 
         }
         if(tex){
             printf("tex \n") ; 
-            printVec(vec[i].tex) ;
+            printVector(vec[i].tex) ;
 
         }
     }
 }
 
-void printVXAT(dataState state){
-    for(int i = 0; i < state.vertexArr.size() ; i ++){
-        printf("Vector") ; 
-        printf("\n") ;
-    }
-}
 
-// > Data handling helpers
-
-// Base populate vertexAttribute
-void clearVXAT(struct vertexAttributes & VXAT){
-    for(int i = 0 ; i < 10 ; i ++){
-        VXAT.arr[i] = 0 ;
-    }
-    VXAT.arr[3] = 1 ; // Init w to 1
-}   
-
-// > Populate position for VXAT
-void positionVXAT(struct vertexAttributes & VXAT, std::vector<double> posVec){
-    for(int i = 0 ; i < posVec.size() ; i ++){
-        VXAT.arr[i] = posVec[i] ;
-    }
-}
-// > Populate Color for VXAT
-void colorVXAT(struct vertexAttributes & VXAT, std::vector<double> colVec) {
-    for(int i = 0 ; i < colVec.size() ; i ++){
-        VXAT.arr[4 + i] = colVec[i] ;
-    }
-}
 
 // -------------------------------------------
 // -------------------------------------------
@@ -122,7 +94,10 @@ void divByWViewportBasic(dataState & state){
             state.posVecW[i][0] = (state.posVecW[i][0] + 1) * state.wPix / 2 ;
             state.posVecW[i][1] = (state.posVecW[i][1] + 1) * state.hPix / 2 ;
     }
-    // printVecNest(state.posVecW) ;
+    if(state.colorSize != 4){
+        state.colorVecW = state.colorVec ;
+    }
+    // printVectorNest(state.colorVecW) ;
     
 }
 
@@ -140,8 +115,14 @@ vecState subVecs(vecState p2, vecState p1, bool tex){
     newPos.push_back(p2.pos[1] - p1.pos[1]) ;
     // > Populate Color
     newCol.push_back(p2.color[0] - p1.pos[0]) ;
+    if(newCol[0] < 0){newCol[0] = 0 ;}
+    if(newCol[0] > 1){newCol[0] = 1 ;}
     newCol.push_back(p2.color[1] - p1.pos[1]) ;
+    if(newCol[1] < 0){newCol[1] = 0 ;}
+    if(newCol[1] > 1){newCol[1] = 1 ;}
     newCol.push_back(p2.color[2] - p1.pos[2]) ;
+    if(newCol[2] < 0){newCol[2] = 0 ;}
+    if(newCol[2] > 1){newCol[2] = 1 ;}
     
 
     retVec.pos = newPos ;
@@ -161,8 +142,15 @@ vecState addVecs(vecState p2, vecState p1, bool tex){
     newPos.push_back(p2.pos[1] + p1.pos[1]) ;
     // > Populate Color
     newCol.push_back(p2.color[0] + p1.pos[0]) ;
+    if(newCol[0] < 0){newCol[0] = 0 ;}
+    if(newCol[0] > 1){newCol[0] = 1 ;}
     newCol.push_back(p2.color[1] + p1.pos[1]) ;
+    if(newCol[1] < 0){newCol[1] = 0 ;}
+    if(newCol[1] > 1){newCol[1] = 1 ;}
     newCol.push_back(p2.color[2] + p1.pos[2]) ;
+    if(newCol[2] < 0){newCol[2] = 0 ;}
+    if(newCol[2] > 1){newCol[2] = 1 ;}
+    
     
 
     retVec.pos = newPos ;
@@ -181,9 +169,17 @@ vecState scaleVec(vecState p1, double scale){
     newPos.push_back(p1.pos[1] * scale) ;
     // > Populate Color
     newCol.push_back(p1.color[0] * scale) ;
-    newCol.push_back(p1.color[0] * scale) ;
-    newCol.push_back(p1.color[0] * scale) ;
+    if(newCol[0] < 0){newCol[0] = 0 ;}
+    if(newCol[0] > 1){newCol[0] = 1 ;}
+    newCol.push_back(p1.color[1] * scale) ;
+    if(newCol[1] < 0){newCol[1] = 0 ;}
+    if(newCol[1] > 1){newCol[1] = 1 ;}
+    newCol.push_back(p1.color[2] * scale) ;
+    if(newCol[2] < 0){newCol[2] = 0 ;}
+    if(newCol[2] > 1){newCol[2] = 1 ;}
     
+    // > My man's got a hear like a rock cast in the sea - - - Saint Louis Blues. Bessie Smith
+
 
     retVec.pos = newPos ;
     retVec.color = newCol ; 

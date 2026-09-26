@@ -8,9 +8,7 @@
 // > MACROS
 #define ATTRIBUTE_VEC_SIZE 10
 
-struct vertexAttributes { // > This may have been a stupid fucking design decision
-    double arr[ATTRIBUTE_VEC_SIZE] ;
-} ;
+
 
 
 // > Create a struct for holding data
@@ -24,7 +22,7 @@ class dataState {
     Image * img ;
 
     // > Populate this
-    std::vector<vertexAttributes> vertexArr ; // > Array of all verties to draw
+    
     std::vector<std::vector<double>> posVec ; 
     std::vector<std::vector<double>> colorVec ; 
     std::vector<std::vector<double>> texVec ; 

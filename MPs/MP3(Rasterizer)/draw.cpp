@@ -20,6 +20,8 @@ void colorPixelBasic(dataState & state, vecState curPt){
         } else{
             (*state.img)[(int)curPt.pos[1]][(int)curPt.pos[0]].alpha = 255 ;
         }
+        printf("Pixel Color : \n") ;
+        printVector(curPt.color) ;
 }
 
 void DDABasicOverX(dataState & state, vecState a_point, vecState b_point){
@@ -43,7 +45,7 @@ void DDABasicOverX(dataState & state, vecState a_point, vecState b_point){
     while(p_x_point.pos[0] < b_point.pos[0]){
         // Color pixel
         colorPixelBasic(state, p_x_point) ;
-
+        
         // Update p_x_point vector
         p_x_point = addVecs(p_x_point, s_x_vec, false) ;
 
@@ -56,26 +58,33 @@ void DDABasicOverX(dataState & state, vecState a_point, vecState b_point){
 // > Returns first top, then bottom then middle
 std::vector<vecState> findTMB(const dataState & state, int offset){
 
-    printf("Entered findTBM with offset: %d \n", offset) ; // > DEBUG
+     printf("Entered findTBM with offset: %d \n", offset) ; // > DEBUG
     // printf(" FIND TMB ENTERED \n") ; // > DEBUG
 
     std::vector<vecState> retVec ; 
     
     
     // > Init vecs
-    vecState t_vec ; t_vec.populateSimple(offset , state) ;
+    vecState t_vec ; 
+    t_vec.populateSimple(offset, state) ;
 
-    vecState b_vec ; b_vec.populateSimple(offset + 1  , state) ; 
+    vecState b_vec ; 
+    b_vec.populateSimple(offset + 1, state) ; 
 
-    vecState m_vec ; m_vec.populateSimple(offset + 2 , state) ;
+    vecState m_vec ; 
+    m_vec.populateSimple(offset + 2, state) ;
 
 
     vecState temp_vec ;
 
-    // > Find max and min
-    // printf("Vecotrs populated\n") ; // > DEBUG
-    
-
+    // > DEBUG print point colors
+    // printf("Testing point colors t :\n") ;
+    // printVector(t_vec.color) ;
+    // printf("Testing point colors b :\n") ;
+    // printVector(b_vec.color) ;
+    // printf("Testing point colors m :\n") ;
+    // printVector(m_vec.color) ;
+    // printf("END TESTING POINT COLORS \n\n") ;
     
     if(t_vec.pos[1] < m_vec.pos[1]){
         //swap if m_vec bigger
@@ -105,7 +114,7 @@ std::vector<vecState> findTMB(const dataState & state, int offset){
     std::reverse(retVec.begin(), retVec.end()) ;
     // printf("Print Vecs\n") ;// DEBUG
     // printSimpleVecs(retVec, true, true, false) ;
-    
+    // printf("Returned from TBM \n") ;
     return retVec ; 
 }
 
@@ -113,94 +122,103 @@ std::vector<vecState> findTMB(const dataState & state, int offset){
 
 // > No alpha channel, no color / texture interpolation
 void scanLineBasic(dataState & state, int first){
-std::vector<vecState> TMB = findTMB(state, first) ;
+
+    // > sort vectors
+    std::vector<vecState> TMB = findTMB(state, first) ;
 
 
-// > Set up line from t to b
-// - - - - - - - - - - - - -
-vecState delta_tb_vec = subVecs(TMB[2], TMB[0], false) ;
-vecState s_tb_vec = scaleVec(delta_tb_vec, 1 / delta_tb_vec.pos[1]) ; 
-double e_tb_scalar = std::ceil(TMB[0].pos[1]) - TMB[0].pos[1];
-vecState o_tb_vec = scaleVec(s_tb_vec, e_tb_scalar) ;
-vecState p_tb_point = addVecs(TMB[0], o_tb_vec, false) ;
+    // > Set up line from t to b
+    // - - - - - - - - - - - - -
+    vecState delta_tb_vec = subVecs(TMB[2], TMB[0], false) ;
+    vecState s_tb_vec = scaleVec(delta_tb_vec, 1 / delta_tb_vec.pos[1]) ; 
+    double e_tb_scalar = std::ceil(TMB[0].pos[1]) - TMB[0].pos[1];
+    vecState o_tb_vec = scaleVec(s_tb_vec, e_tb_scalar) ;
+    vecState p_tb_point = addVecs(TMB[0], o_tb_vec, false) ;
 
-// printf("P vec\n") ; // DEBUG
-// printSimpleVec(s_tb_vec, true, false, false) ;
+    // printf("P vec\n") ; // DEBUG
+    // printSimpleVec(s_tb_vec, true, false, false) ;
 
-// > Set up line from t to m
-vecState delta_tm_vec = subVecs(TMB[1], TMB[0], false) ;
-vecState s_tm_vec = scaleVec(delta_tm_vec, 1 / delta_tm_vec.pos[1]) ;
-double e_tm_scalar = std::ceil(TMB[0].pos[1]) - TMB[0].pos[1] ;
-vecState o_tm_vec = scaleVec(s_tm_vec, e_tm_scalar) ;
-vecState p_tm_point = addVecs(TMB[0], o_tm_vec, false) ;
+    // > Set up line from t to m
+    vecState delta_tm_vec = subVecs(TMB[1], TMB[0], false) ;
+    vecState s_tm_vec = scaleVec(delta_tm_vec, 1 / delta_tm_vec.pos[1]) ;
+    double e_tm_scalar = std::ceil(TMB[0].pos[1]) - TMB[0].pos[1] ;
+    vecState o_tm_vec = scaleVec(s_tm_vec, e_tm_scalar) ;
+    vecState p_tm_point = addVecs(TMB[0], o_tm_vec, false) ;
 
-// printf("Print TB point 1\n") ; // DEBUG
-// printSimpleVec(p_tb_point, true, false, false) ; // > Debug
-// printf("Print TM point 1\n") ; // DEBUG
-// printSimpleVec(p_tm_point, true, false, false) ; // > Debug
-
-
-// Set up a and b vectors for in x iteration
-vecState a_point = p_tm_point ; 
-vecState b_point = p_tb_point ;
+    // printf("Print TB point 1\n") ; // DEBUG
+    // printSimpleVec(p_tb_point, true, false, false) ; // > Debug
+    // printf("Print TM point 1\n") ; // DEBUG
+    // printSimpleVec(p_tm_point, true, false, false) ; // > Debug
 
 
-while(p_tm_point.pos[1] < TMB[1].pos[1]){ // While p[y] < m[y]
-    if(p_tm_point.pos[0] == p_tb_point.pos[0]){ // > If x values are the same
-        continue  ; //!!
+    // Set up a and b vectors for in x iteration
+    vecState a_point = p_tm_point ; 
+    vecState b_point = p_tb_point ;
+
+        // > DEBUG
+    // printSimpleVec(p_tm_point, true ,true, false) ;
+    // printSimpleVec(p_tb_point, true, true, false) ;
+    // > DEBUG
+
+
+    while(p_tm_point.pos[1] < TMB[1].pos[1]){ // While p[y] < m[y]
+        if(p_tm_point.pos[0] == p_tb_point.pos[0]){ // > If x values are the same
+            //continue  ; //!!
+        }
+        if(a_point.pos[0] > b_point.pos[0]){ // > Swap
+            a_point = p_tb_point ;
+            b_point = p_tm_point ;
+        }
+
+        DDABasicOverX(state, a_point, b_point) ;
+        // > Update edge points
+        p_tb_point = addVecs(p_tb_point, s_tb_vec, false) ;
+        p_tm_point = addVecs(p_tm_point, s_tm_vec, false) ;
+        
+        // > Update a and b vectors
+        a_point = p_tm_point ; 
+        b_point = p_tb_point ;    
+        
     }
-    if(a_point.pos[0] > b_point.pos[0]){ // > Swap
-        a_point = p_tb_point ;
-        b_point = p_tm_point ;
-    }
 
-    DDABasicOverX(state, a_point, b_point) ;
-    // > Update edge points
-    p_tb_point = addVecs(p_tb_point, s_tb_vec, false) ;
-    p_tm_point = addVecs(p_tm_point, s_tm_vec, false) ;
-    
-    // > Update a and b vectors
-    a_point = p_tm_point ; 
-    b_point = p_tb_point ;    
-}
+    // > Set up line from t to m
+    vecState delta_mb_vec = subVecs(TMB[2], TMB[1], false) ;
+    vecState s_mb_vec = scaleVec(delta_mb_vec, 1 / delta_mb_vec.pos[1]) ;
+    double e_mb_scalar = std::ceil(TMB[1].pos[1]) - TMB[1].pos[1] ;
+    vecState o_mb_vec = scaleVec(s_mb_vec, e_mb_scalar) ;
+    vecState p_mb_point = addVecs(TMB[1], o_mb_vec, false) ;
+
+    // > Reset a and b points
+    a_point = p_mb_point ; // new, middle to bottom point
+    b_point = p_tb_point ; // old, top to bottom, 
 
 
 
-// > Set up line from t to m
-vecState delta_mb_vec = subVecs(TMB[2], TMB[1], false) ;
-vecState s_mb_vec = scaleVec(delta_mb_vec, 1 / delta_mb_vec.pos[1]) ;
-double e_mb_scalar = std::ceil(TMB[1].pos[1]) - TMB[1].pos[1] ;
-vecState o_mb_vec = scaleVec(s_mb_vec, e_mb_scalar) ;
-vecState p_mb_point = addVecs(TMB[1], o_mb_vec, false) ;
+    while(p_mb_point.pos[1] < TMB[2].pos[1]){ // > While p[y] < b[y]
+        
+        if(p_mb_point.pos[0] == p_tb_point.pos[0]){ // > If x values are the same
+            //continue ;
+        }
+        if(a_point.pos[0] > b_point.pos[0]){ // > Swap based on x values
+            a_point = p_tb_point ;
+            b_point = p_mb_point ;
+        }
+        
+        // > Draw point in X
+        DDABasicOverX(state, a_point, b_point) ;
+        
+        p_tb_point = addVecs(p_tb_point, s_tb_vec, false) ;
+        p_mb_point = addVecs(p_mb_point, s_mb_vec, false) ;
+        
+        a_point = p_mb_point ; 
+        b_point = p_tb_point ;
 
-// > Reset a and b points
-a_point = p_mb_point ; // new, middle to bottom point
-b_point = p_tb_point ; // old, top to bottom, 
-
-while(p_mb_point.pos[1] < TMB[2].pos[1]){ // > While p[y] < b[y]
-    
-    if(p_mb_point.pos[0] == p_tb_point.pos[0]){ // > If x values are the same
-        continue ;
-    }
-    if(a_point.pos[0] > b_point.pos[0]){ // > Swap based on x values
-        a_point = p_tb_point ;
-        b_point = p_mb_point ;
-    }
-    
-    // > Draw point in X
-    DDABasicOverX(state, a_point, b_point) ;
-    
-    p_tb_point = addVecs(p_tb_point, s_tb_vec, false) ;
-    p_mb_point = addVecs(p_mb_point, s_mb_vec, false) ;
-    
-    a_point = p_mb_point ; 
-    b_point = p_tb_point ;
-
-    }
+        }
 
 
     return ;
-}
+    }
+
 
 
 

@@ -8,9 +8,9 @@ class dataState ;
 class vecState ;
 
 // > Debugging utils
-void printVecNest(std::vector< std::vector<double> > vec) ; 
+void printVectorNest(std::vector< std::vector<double> > vec) ; 
 
-void printVec(std::vector<double> vec) ; 
+void printVector(std::vector<double> vec) ; 
 
 void printSimpleVecs(std::vector<vecState>, bool pos, bool color, bool tex) ;
 

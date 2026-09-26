@@ -24,4 +24,22 @@ by reference passage
 09 / 24 / 2026 - - -
 Running into issues currently with the scanline algorithm on drawing the bottom half of the triangle
 
+> Putting the continue in the check equal is BASIC
 
+
+09 / 26 / 26
+> Make sure this shit compiles - - -
+> Ok, good on that front, lets fix the coloring
+
+> Bro check the errors with what youre actually printing hol tucking shit 
+
+> Looks like in our add point vecotr, subtract, and scale, we need to add minimum and cap color values to zero and 1 lol
+
+ > Currently seems like I was doing a bad job at capping the colors in the vector operations
+
+  > Ok, thats a definitive, change, everything is just white now lmao
+
+  > Could also be a double vs float error ? Maybe cap colors to 255 before doing any math on them and cast to int?
+
+  > Then we may avoid strange things like this
+  

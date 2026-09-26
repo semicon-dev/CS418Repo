@@ -40,8 +40,12 @@ void vecState::populateSimple(int offset, const dataState & state){
     //printf("Posvec size : %d \n", size) ; //DEBUG
     
     pos = state.posVecW[offset] ;
-    //printf("test \n") ;
-    color = state.colorVec[offset] ;
+    //printf("Vector : \n") ;
+    //printVector(state.colorVecW[offset]) ;
+
+    color = state.colorVecW[offset] ;
+    //printf("Copied Color Vector\n") ;
+    //printVector(color) ;
 }
 
 // > Basic line parsing for multiple coordinates
@@ -178,6 +182,7 @@ int parseFile(std::string filepath){
             dataVector = parseNumberLine(kMod, 7, curLine) ;
             //printf("Completed Color\n") ;//!!DEBUG
             curDS.colorVec = dataVector ; 
+            // printVectorNest(curDS.colorVec) ; // > DEBUG!!
             continue ;
         }
 
@@ -227,7 +232,7 @@ int parseFile(std::string filepath){
     // printf("colors : \n") ; 
     // printVecNest(curDS.colorVec) ;
     curDS.saveImage() ;
-    // free(curDS.img) ;// > This should work
+    free(curDS.img) ;// > This should work
     return 0 ; 
 }
 
