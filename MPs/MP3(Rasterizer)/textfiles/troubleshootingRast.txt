@@ -60,3 +60,17 @@ make run file=inputfilename.txt
 > Try to directly floor the y vector when calculating
 
 > Try later. Current corrected SOME pixels via a round operation instead of a direct int floor
+
+> What did I learn? 
+
+I learned that you should do a MINIMAL number of floating point operations
+
+09  /27 / 26 - - - 
+Wondering if it was a color interpolation issue and not a position one. 
+
+int cast (int) causes direct flooring and could cause further issues when multiplied by 255 ?
+Maximally, it seems like only 60 pixels are lerped over, so i can't possibly see that as being the
+cause of the issue, at least at the root
+
+Again, the fix was by adding in an inverse option to the scale vector function which allowed
+me do less floating point operations when scaling the vectors!

@@ -8,7 +8,7 @@
 
 
 // > Go down moses, Paul Robeson
-
+int debugIt = 0 ;
 // > Helper Drawing Functions
 
 void colorPixelBasic(dataState & state, vecState curPt){
@@ -44,8 +44,8 @@ void DDABasicOverX(dataState & state, vecState a_point, vecState b_point){
     // Find first potential point - - -
     delta_x_vec = subVecs(b_point, a_point, false) ;
     s_x_vec = scaleVec(delta_x_vec, delta_x_vec.pos[0], true) ;
-    printf("s_x_vec check \n") ; // DEBUG
-    printSimpleVec(s_x_vec, true, false, false) ;
+    //printf("s_x_vec check \n") ; // DEBUG
+    //printSimpleVec(s_x_vec, true, false, false) ;
     e_x_scalar = std::ceil(a_point.pos[0]) - a_point.pos[0] ;
     o_x_vec = scaleVec(s_x_vec, e_x_scalar, false) ;
     p_x_point = addVecs(a_point, o_x_vec, false) ; 
