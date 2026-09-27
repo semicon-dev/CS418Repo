@@ -24,7 +24,8 @@ dataState::dataState(){
 }
 
 void dataState::saveImage(){
-    (*img).save("./outputs/test.png") ;
+    // (*img).save("./outputs/test.png") ;
+    (*img).save((this->filename).c_str()) ;
     return ;
 }
 

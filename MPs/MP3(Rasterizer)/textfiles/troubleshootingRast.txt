@@ -42,4 +42,17 @@ Running into issues currently with the scanline algorithm on drawing the bottom 
   > Could also be a double vs float error ? Maybe cap colors to 255 before doing any math on them and cast to int?
 
   > Then we may avoid strange things like this
-  
+
+
+  > Perhaps I need to cap them after I've done math with the colors and right before drawing?
+
+  > Let me try adding div by w to the colors
+
+  > One small typo, fixed that. (I was adding position to color from a copy paste bug and sleep deprivation)Need to now fix drawing multiple triangles. Should hopefully fix 
+  rast checkers and rast smallgap next!
+
+  Ok, lets run this puppy with the make file 
+
+make build
+make run file=inputfilename.txt
+

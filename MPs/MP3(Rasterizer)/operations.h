@@ -12,6 +12,10 @@ void printVectorNest(std::vector< std::vector<double> > vec) ;
 
 void printVector(std::vector<double> vec) ; 
 
+void printVectorInt(std::vector<int> vec) ;
+
+void printVectorNestInt(std::vector< std::vector<int> > vec) ;
+
 void printSimpleVecs(std::vector<vecState>, bool pos, bool color, bool tex) ;
 
 void printSimpleVec(vecState vec, bool pos, bool color, bool tex) ;

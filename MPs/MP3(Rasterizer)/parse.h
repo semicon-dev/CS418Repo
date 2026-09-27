@@ -29,7 +29,7 @@ class dataState {
 
     // > Set of vectors 
     std::vector<std::vector<double>> posVecW ; 
-    std::vector<std::vector<double>> colorVecW ; 
+    std::vector<std::vector<double>> colorVecW ; // 0 t0 255
     std::vector<std::vector<double>> texVecW ; 
 
     // > Modes

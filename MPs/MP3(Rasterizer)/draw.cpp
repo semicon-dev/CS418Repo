@@ -16,12 +16,12 @@ void colorPixelBasic(dataState & state, vecState curPt){
         (*state.img)[(int)curPt.pos[1]][(int)curPt.pos[0]].green = (int)255*curPt.color[1] ;
         (*state.img)[(int)curPt.pos[1]][(int)curPt.pos[0]].blue = (int)255*curPt.color[2] ;
         if(state.colorSize == 4){
-            (*state.img)[(int)curPt.pos[1]][(int)curPt.pos[0]].alpha = (int)255*curPt.color[3] ;
+            (*state.img)[(int)curPt.pos[1]][(int)curPt.pos[0]].alpha = (int)curPt.color[3] ;
         } else{
             (*state.img)[(int)curPt.pos[1]][(int)curPt.pos[0]].alpha = 255 ;
         }
-        printf("Pixel Color : \n") ;
-        printVector(curPt.color) ;
+        // printf("Pixel Color : \n") ;
+        // printVector(curPt.color) ;
 }
 
 void DDABasicOverX(dataState & state, vecState a_point, vecState b_point){
@@ -58,7 +58,7 @@ void DDABasicOverX(dataState & state, vecState a_point, vecState b_point){
 // > Returns first top, then bottom then middle
 std::vector<vecState> findTMB(const dataState & state, int offset){
 
-     printf("Entered findTBM with offset: %d \n", offset) ; // > DEBUG
+    // printf("Entered findTBM with offset: %d \n", offset) ; // > DEBUG
     // printf(" FIND TMB ENTERED \n") ; // > DEBUG
 
     std::vector<vecState> retVec ; 
@@ -76,15 +76,6 @@ std::vector<vecState> findTMB(const dataState & state, int offset){
 
 
     vecState temp_vec ;
-
-    // > DEBUG print point colors
-    // printf("Testing point colors t :\n") ;
-    // printVector(t_vec.color) ;
-    // printf("Testing point colors b :\n") ;
-    // printVector(b_vec.color) ;
-    // printf("Testing point colors m :\n") ;
-    // printVector(m_vec.color) ;
-    // printf("END TESTING POINT COLORS \n\n") ;
     
     if(t_vec.pos[1] < m_vec.pos[1]){
         //swap if m_vec bigger
@@ -145,20 +136,11 @@ void scanLineBasic(dataState & state, int first){
     vecState o_tm_vec = scaleVec(s_tm_vec, e_tm_scalar) ;
     vecState p_tm_point = addVecs(TMB[0], o_tm_vec, false) ;
 
-    // printf("Print TB point 1\n") ; // DEBUG
-    // printSimpleVec(p_tb_point, true, false, false) ; // > Debug
-    // printf("Print TM point 1\n") ; // DEBUG
-    // printSimpleVec(p_tm_point, true, false, false) ; // > Debug
-
 
     // Set up a and b vectors for in x iteration
     vecState a_point = p_tm_point ; 
     vecState b_point = p_tb_point ;
 
-        // > DEBUG
-    // printSimpleVec(p_tm_point, true ,true, false) ;
-    // printSimpleVec(p_tb_point, true, true, false) ;
-    // > DEBUG
 
 
     while(p_tm_point.pos[1] < TMB[1].pos[1]){ // While p[y] < m[y]
@@ -224,7 +206,11 @@ void scanLineBasic(dataState & state, int first){
 
 // > Main Function - -- 
 int drawArraysTrianglesBasic(int first, int count, dataState & state){
+    
     divByWViewportBasic(state) ;
-    scanLineBasic(state, first) ; 
+    for(int i = 0 ; i < (count / 3) ; i ++){
+        scanLineBasic(state, first + i * 3) ; 
+    }
+    // scanLineBasic(state, first) ; 
     return 0 ; 
 }
