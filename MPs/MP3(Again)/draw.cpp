@@ -13,8 +13,8 @@
 
 void colorPixelBasic(dataState & state, vecState curPt){
     // > Bounds checking (as noted within the docs)
-    int x_pix = (int)std::round(curPt.pos[0]) ;
-    int y_pix = (int)std::round(curPt.pos[1]) ;
+    int x_pix = (int)(curPt.pos[0]) ;
+    int y_pix = (int)(curPt.pos[1]) ;
     if((x_pix < 0) || (y_pix < 0) || (x_pix >= (state.wPix)) || (y_pix >= (state.hPix))){
         // > Dont draw if out of bounds
         return ; 
