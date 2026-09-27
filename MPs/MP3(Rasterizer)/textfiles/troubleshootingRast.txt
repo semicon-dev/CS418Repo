@@ -58,3 +58,5 @@ make run file=inputfilename.txt
 
 // > Ok, the checkers does NOT work. I am guessing this is some off by one error or something idk
 > Try to directly floor the y vector when calculating
+
+> Try later. Current corrected SOME pixels via a round operation instead of a direct int floor

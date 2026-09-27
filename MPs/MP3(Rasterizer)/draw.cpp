@@ -43,10 +43,13 @@ void DDABasicOverX(dataState & state, vecState a_point, vecState b_point){
 
     // Find first potential point - - -
     delta_x_vec = subVecs(b_point, a_point, false) ;
-    s_x_vec = scaleVec(delta_x_vec, 1 / delta_x_vec.pos[0]) ;
+    s_x_vec = scaleVec(delta_x_vec, delta_x_vec.pos[0], true) ;
+    printf("s_x_vec check \n") ; // DEBUG
+    printSimpleVec(s_x_vec, true, false, false) ;
     e_x_scalar = std::ceil(a_point.pos[0]) - a_point.pos[0] ;
-    o_x_vec = scaleVec(s_x_vec, e_x_scalar) ;
+    o_x_vec = scaleVec(s_x_vec, e_x_scalar, false) ;
     p_x_point = addVecs(a_point, o_x_vec, false) ; 
+
 
 
     while(p_x_point.pos[0] < b_point.pos[0]){
@@ -128,9 +131,11 @@ void scanLineBasic(dataState & state, int first){
     // > Set up line from t to b
     // - - - - - - - - - - - - -
     vecState delta_tb_vec = subVecs(TMB[2], TMB[0], false) ;
-    vecState s_tb_vec = scaleVec(delta_tb_vec, 1 / delta_tb_vec.pos[1]) ; 
+    vecState s_tb_vec = scaleVec(delta_tb_vec, delta_tb_vec.pos[1], true) ; 
+    //printf("s_tb_vec check \n") ; // DEBUG
+    //printSimpleVec(s_tb_vec, true, false, false) ;
     double e_tb_scalar = std::ceil(TMB[0].pos[1]) - TMB[0].pos[1];
-    vecState o_tb_vec = scaleVec(s_tb_vec, e_tb_scalar) ;
+    vecState o_tb_vec = scaleVec(s_tb_vec, e_tb_scalar, false) ;
     vecState p_tb_point = addVecs(TMB[0], o_tb_vec, false) ;
 
     // printf("P vec\n") ; // DEBUG
@@ -138,9 +143,9 @@ void scanLineBasic(dataState & state, int first){
 
     // > Set up line from t to m
     vecState delta_tm_vec = subVecs(TMB[1], TMB[0], false) ;
-    vecState s_tm_vec = scaleVec(delta_tm_vec, 1 / delta_tm_vec.pos[1]) ;
+    vecState s_tm_vec = scaleVec(delta_tm_vec, delta_tm_vec.pos[1], true) ;
     double e_tm_scalar = std::ceil(TMB[0].pos[1]) - TMB[0].pos[1] ;
-    vecState o_tm_vec = scaleVec(s_tm_vec, e_tm_scalar) ;
+    vecState o_tm_vec = scaleVec(s_tm_vec, e_tm_scalar, false) ;
     vecState p_tm_point = addVecs(TMB[0], o_tm_vec, false) ;
 
 
@@ -172,9 +177,9 @@ void scanLineBasic(dataState & state, int first){
 
     // > Set up line from t to m
     vecState delta_mb_vec = subVecs(TMB[2], TMB[1], false) ;
-    vecState s_mb_vec = scaleVec(delta_mb_vec, 1 / delta_mb_vec.pos[1]) ;
+    vecState s_mb_vec = scaleVec(delta_mb_vec, delta_mb_vec.pos[1], true) ;
     double e_mb_scalar = std::ceil(TMB[1].pos[1]) - TMB[1].pos[1] ;
-    vecState o_mb_vec = scaleVec(s_mb_vec, e_mb_scalar) ;
+    vecState o_mb_vec = scaleVec(s_mb_vec, e_mb_scalar, false) ;
     vecState p_mb_point = addVecs(TMB[1], o_mb_vec, false) ;
 
     // > Reset a and b points
@@ -186,7 +191,7 @@ void scanLineBasic(dataState & state, int first){
     while(p_mb_point.pos[1] < TMB[2].pos[1]){ // > While p[y] < b[y]
         
         if(p_mb_point.pos[0] == p_tb_point.pos[0]){ // > If x values are the same
-            //continue ;
+           // continue ;
         }
         if(a_point.pos[0] > b_point.pos[0]){ // > Swap based on x values
             a_point = p_tb_point ;

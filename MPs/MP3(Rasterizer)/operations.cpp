@@ -8,7 +8,7 @@
 // > Vector Print Helper
 void printVector(std::vector<double> vec){
     for(int i = 0 ; i < vec.size() ; i ++){
-        printf("Item : %f \n", vec[i] ) ; 
+        printf("Item : %.17g \n", vec[i] ) ; 
     }
     return ; 
 }
@@ -178,11 +178,12 @@ vecState addVecs(vecState p2, vecState p1, bool tex){
     return retVec ;
 }
 
-vecState scaleVec(vecState p1, double scale){
+vecState scaleVec(vecState p1, double scale, bool inv){
         vecState retVec ;
     std::vector<double> newPos ; 
     std::vector<double> newCol ; 
     
+    if(!inv){
     // > Populate Position
     newPos.push_back(p1.pos[0] * scale) ;
     newPos.push_back(p1.pos[1] * scale) ;
@@ -192,13 +193,22 @@ vecState scaleVec(vecState p1, double scale){
     newCol.push_back(p1.color[1] * scale) ;
 
     newCol.push_back(p1.color[2] * scale) ;
+    } else{
+        newPos.push_back(p1.pos[0] / scale) ;
+    newPos.push_back(p1.pos[1] / scale) ;
+    // > Populate Color
+    newCol.push_back(p1.color[0] / scale) ;
 
+    newCol.push_back(p1.color[1] / scale) ;
+
+    newCol.push_back(p1.color[2] / scale) ;
+    }
     
-    // > My man's got a hear like a rock cast in the sea - - - Saint Louis Blues. Bessie Smith
-
-
+    
     retVec.pos = newPos ;
     retVec.color = newCol ; 
 
     return retVec ;
 }
+
+// > My man's got a hear like a rock cast in the sea - - - Saint Louis Blues. Bessie Smith

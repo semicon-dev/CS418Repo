@@ -35,5 +35,5 @@ void divByWViewportBasic(dataState & state) ;
 // > Point operations
 vecState subVecs(vecState p2, vecState p1, bool tex) ; 
 vecState addVecs(vecState p2, vecState p1, bool tex) ; 
-vecState scaleVec(vecState p1, double scale) ; 
+vecState scaleVec(vecState p1, double scale, bool inv) ; 
 
