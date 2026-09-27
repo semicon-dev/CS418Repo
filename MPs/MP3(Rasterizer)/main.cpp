@@ -13,7 +13,7 @@ int main(int argc, char* argv[]){
     // > Parse File
     int ret = parseFile(filepath) ; 
     if(ret != 0){
-        printf("Idk but you fucked up lol \n") ; 
+        printf("Oopsie Poopsie \n") ; 
     }
 
 

@@ -12,9 +12,16 @@
 // > Helper Drawing Functions
 
 void colorPixelBasic(dataState & state, vecState curPt){
-    (*state.img)[(int)curPt.pos[1]][(int)curPt.pos[0]].red = (int)255*curPt.color[0] ;
-        (*state.img)[(int)curPt.pos[1]][(int)curPt.pos[0]].green = (int)255*curPt.color[1] ;
-        (*state.img)[(int)curPt.pos[1]][(int)curPt.pos[0]].blue = (int)255*curPt.color[2] ;
+    // > Bounds checking (as noted within the docs)
+    int x_pix = (int)curPt.pos[0] ;
+    int y_pix = (int)curPt.pos[1] ;
+    if((x_pix < 0) || (y_pix < 0) || (x_pix > (state.wPix - 1)) || (y_pix > (state.hPix - 1))){
+        // > Dont draw if out of bounds
+        return ; 
+    }
+        (*state.img)[y_pix][x_pix].red = (int)255*curPt.color[0] ;
+        (*state.img)[y_pix][x_pix].green = (int)255*curPt.color[1] ;
+        (*state.img)[y_pix][x_pix].blue = (int)255*curPt.color[2] ;
         if(state.colorSize == 4){
             (*state.img)[(int)curPt.pos[1]][(int)curPt.pos[0]].alpha = (int)curPt.color[3] ;
         } else{

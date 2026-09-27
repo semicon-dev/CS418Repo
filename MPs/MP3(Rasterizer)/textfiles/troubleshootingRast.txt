@@ -56,3 +56,5 @@ Running into issues currently with the scanline algorithm on drawing the bottom 
 make build
 make run file=inputfilename.txt
 
+// > Ok, the checkers does NOT work. I am guessing this is some off by one error or something idk
+>
