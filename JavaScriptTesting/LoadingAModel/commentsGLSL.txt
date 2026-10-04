@@ -1,0 +1,12 @@
+ # gl_Position = vec2(position.x * s, position.y * s) ;
+ # float32 s = 1 / 14 ; 
+
+
+ FUUUUUUUUCK YES IT FUCKING WORKS 
+
+ I DID NOT KNOW THAT I NEEDED TO FREAKING OMG I NEEDED TO FREAKING
+ START THE TRIANGLE OFFSETS AT 0 AND NOT START THE TRIANGLE OFFSETS AT UM
+ ERRMMMMM FREAKING LITERALLY 1 OMG LOOOL THIS IS SO ANNOYING
+
+
+Looks like // does actually work in order to comment things out

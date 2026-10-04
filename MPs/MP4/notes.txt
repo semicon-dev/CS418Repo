@@ -1,0 +1,15 @@
+09 / 30 / 26 - - -
+> Alright, My actual vertices file appears to be fine
+
+> I need to place the tansofmr matrix in a JS file and pass it in as a uniform
+
+> Do not create the matrix directly in the shader file
+
+> I wonder if there are any examples of this math library being used
+
+> I don't really see any in the provided in class examples
+
+
+> New idea : How do I actually find the console where the debug messages are thrown to?
+// > console.log() things shows up int he Console in the inspect element thing, and not actually 
+in the system terminal

@@ -1,0 +1,4 @@
+Run webserver with "python -m http.server"
+Or tbh maybe just 1.
+"python3 webserver.py"
+and then go to http://localhost:8000/myfile.html
