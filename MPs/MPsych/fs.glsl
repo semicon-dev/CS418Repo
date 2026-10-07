@@ -7,5 +7,6 @@ in vec4 vPos ;
 out vec4 fragColor;
 
 void main() {
-    fragColor = vec4(0.6*cos( 4.0 * (seconds)), 0.7, 1.0, 0.956) ; 
+    fragColor.x = 0.6*cos( 4.0 * (seconds)) ;
+    fragColor.yzw = vec3(0.7, 0.5, 0.956) ;
 }
