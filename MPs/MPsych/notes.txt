@@ -26,3 +26,5 @@ This is the one that fills the screen with CRAZY FUN AND AWESOME SHAPES LELLLLL!
 > Ok first, lets try just coloring everything black on the canvas, then we can add the fun patterns
 
 > Look up glsl code examples?
+
+ > Putting the vx in there basically created a variable period for our function, which means its not truly periodic
