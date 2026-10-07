@@ -1,0 +1,28 @@
+10 / 7 / 26 - --  man i guess they just fucking embed the javascript into the html doc, without using multiple files
+
+Vertex Shader vs.glsl  - - -
+Invoked with gl_VertexID 0 through 5 inclusive, 0, 1, 2 - - - 3 , 4 , 5 another triangle
+
+> Attribute, provides per vertex data and is sent to the GPU via a buffer. GPU identifies buffers by indicies (locations) 
+
+> Coordinates range from -1 to + 1
+gl_VertexID is built in 
+
+> cover the (-1, -1) to (1, 1) square
+
+> Create and set an 'out' variable to indicate where each fragment is> Copy of gl_Position in an out variable
+Why copy?
+
+> Then, we have a gl_fragCoord
+
+> FRAGMENT SHADER 
+- - - - - - - - -
+This is the one that fills the screen with CRAZY FUN AND AWESOME SHAPES LELLLLL!!!
+> Add uniform float seconds to this Shader
+> take a and y position of each fragment (passed as an out variable in the vertex shader to an in variable in the fragment shader)
+
+> put via polynomianl, and periodic functino to make it repeat 
+
+> Ok first, lets try just coloring everything black on the canvas, then we can add the fun patterns
+
+> Look up glsl code examples?
