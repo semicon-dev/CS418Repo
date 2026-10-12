@@ -1,3 +1,9 @@
 Clearly, there is some issue that I am having with perspective, that I causing the whole derned thing to not work
 
  > Allow javascript file to access another javascript file ? 
+
+ // > separate copies of verties at the same location
+
+ > Maybe we shoud mkae more things~~~!!!!!
+
+ // > The ONE on the RIGHT happens first

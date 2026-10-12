@@ -14,6 +14,7 @@ var tetrahedron =
             ,[ 0.5, 0.5,-0.5]
             ,[-0.5, 0.5, 0.5]
             ,[ 0.5,-0.5, 0.5]
+            // copeis
             ]
            , // color data!
             [[0.9,0.5,0.0]
@@ -23,6 +24,37 @@ var tetrahedron =
             ]
         ]
     }
+
+    var octahedron = {"triangles":
+        [[0,1,2]
+            , [0,2,3]
+            , [0,3,4]
+            , [0,4,1]
+            , [5,1,4]
+            , [5,4,3]
+            , [5,3,2]
+            , [5,2,1]
+        ]
+    ,"attributes":
+        [ // position
+            [[1,0,0]
+            ,[0,1,0]
+            ,[0,0,1]
+            ,[0,-1,0]
+            ,[0,0,-1]
+            ,[-1,0,0]
+            ]
+           , // color data!
+            [[1,0.5,0.5]
+            ,[0.5,1,0.5]
+            ,[0.5,0.5,1]
+            ,[0.5,0,0.5]
+            ,[0.5,0.5,0]
+            ,[0,0.5,0.5]
+            ]
+        ]
+    }
+
 
 
 /** Draw one frame */
@@ -39,7 +71,26 @@ function draw(seconds) {
     gl.uniformMatrix4fv(program.uniforms.mv, false, m4mul(v,m)) // model BEFORE view
     gl.uniformMatrix4fv(program.uniforms.p, false, p)
     
+    //  > Draw the elements!
+    
+    // > Element 1 
     gl.drawElements(geom.mode, geom.count, geom.type, 0)
+
+    // > Element 2
+    let m2trans = m4trans(2, 0, 0)
+    let m2rot = m4rotX(seconds)
+    m2 = m4mul(m2rot, m2trans)
+    gl.uniformMatrix4fv(program.uniforms.mv, false, m4mul(v,m2)) // model BEFORE view
+    gl.drawElements(geom.mode, geom.count, geom.type, 0)
+
+    // > Element 3
+    let m3trans = m4trans(2, 3, 0)
+    let m3rot = m4rotX(seconds * 2)
+    m3 = m4mul(m3rot, m3trans)
+    gl.uniformMatrix4fv(program.uniforms.mv, false, m4mul(v,m3)) // model BEFORE view
+    gl.drawElements(geom.mode, geom.count, geom.type, 0)
+
+
 
 }
 
@@ -78,7 +129,7 @@ window.addEventListener('load', async (event) => {
     window.program = compileShader(vs,fs)
     gl.enable(gl.DEPTH_TEST)
     
-    window.geom = setupGeometry(tetrahedron) ; // > Ok so we call the setups first and THEN we call the 
+    window.geom = setupGeometry(octahedron) ; // > Ok so we call the setups first and THEN we call the 
     // let data = await fetch('geom.json').then(r=>r.json())
     // window.geom = setupGeometry(data) ;
 
