@@ -1,0 +1,84 @@
+// > Geometries - - -
+var tetrahedron =
+    {"triangles":
+        [0,1,2
+        ,1,2,3
+        ,2,3,0
+        ,3,0,1
+        ]
+    ,"attributes":
+        [ // position
+            [[-0.5,-0.5,-0.5]
+            ,[ 0.5, 0.5,-0.5]
+            ,[-0.5, 0.5, 0.5]
+            ,[ 0.5,-0.5, 0.5]
+            ]
+        ]
+    }
+
+
+
+
+
+function draw(milliseconds){
+    gl.clearColor(...IlliniBlue) // f(...[1,2,3]) means f(1,2,3)
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
+    gl.useProgram(program)
+
+    gl.bindVertexArray(geom.vao)
+
+    gl.uniform4fv(program.uniforms.color, IlliniOrange)
+    let m = m4rotX(seconds)
+    let v = m4view([1,2,3], [0,0,0], [0,1,0])
+    gl.uniformMatrix4fv(program.uniforms.mv, false, m4mul(v,m))
+    gl.uniformMatrix4fv(program.uniforms.p, false, p)
+    
+    gl.drawElements(geom.mode, geom.count, geom.type, 0)
+
+}
+
+/** Resizes the canvas to completely fill the screen */
+function fillScreen() {
+    let canvas = document.querySelector('canvas')
+    document.body.style.margin = '0'
+    canvas.style.width = '100vw'
+    canvas.style.height = '100vh'
+    canvas.width = canvas.clientWidth
+    canvas.height = canvas.clientHeight
+    canvas.style.width = ''
+    canvas.style.height = ''
+    if (window.gl) {
+        gl.viewport(0,0, canvas.width, canvas.height)
+        window.p = m4perspNegZ(0.1, 10, 1.5, canvas.width, canvas.height)
+    }
+}
+
+    function tick(milliseconds){
+        draw(milliseconds) // > Calls draw with curr number of ms
+        requestAnimationFrame(tick) ; 
+
+    }
+
+
+    /** Compile, link, set up geometry */
+    window.addEventListener('load', async (event) => {
+    window.gl = document.querySelector('canvas').getContext('webgl2',
+        // optional configuration object: see https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/getContext
+        {antialias: false, depth:true, preserveDrawingBuffer:true}
+    )
+    let vs = await fetch('vx.glsl').then(r => r.text())
+    let fs = await fetch('fr.glsl').then(r => r.text())
+
+    window.program = compileShader(vs,fs)
+
+    gl.enable(gl.DEPTH_TEST)
+    // window.geom = setupGeomery(tetrahedron)
+   // window.geom = setupGeometry(tetrahedron) ; // > Ok so we call the setups first and THEN we call the 
+   
+    let data = await fetch('geom.json').then(r=>r.json())
+    window.geom = setupGeometry(data) ;
+
+    fillScreen()
+    window.addEventListener('resize', fillScreen)
+    requestAnimationFrame(tick)
+})

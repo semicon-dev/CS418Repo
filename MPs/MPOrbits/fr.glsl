@@ -1,9 +1,8 @@
 #version 300 es
 precision highp float;
-
-in vec4 vColor;
+uniform vec4 color;
+in vec4 vColor ; // > Note!! modified to json goem compliancy
 out vec4 fragColor;
-
 void main() {
-    fragColor = vColor;
+    fragColor = vColor; // !! swap to color for json compliancy
 }
