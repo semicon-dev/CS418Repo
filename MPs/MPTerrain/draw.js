@@ -1,5 +1,9 @@
 /** Draw one frame */
+// TESTING
 
+
+
+// TESTING END
 
 
 function draw(seconds) {
@@ -101,7 +105,8 @@ window.addEventListener('load', async (event) => {
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
     let monkey = await fetch('monkey.json').then(res => res.json())
     addNormals(monkey)
-    window.geom = setupGeomery(monkey)
+    //window.geom = setupGeomery(monkey)
+    window.geom = setupGeometry(tetrahedron)  ;
     fillScreen()
     window.addEventListener('resize', fillScreen)
     requestAnimationFrame(tick)

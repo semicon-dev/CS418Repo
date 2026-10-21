@@ -85,7 +85,7 @@ function supplyDataBuffer(data, loc, mode) {
  *  - type = the 3rd argument for gl.drawElements
  *  - vao = the vertex array object for use with gl.bindVertexArray
  */
-function setupGeomery(geom) {
+function setupGeometry(geom) {
     var triangleArray = gl.createVertexArray()
     gl.bindVertexArray(triangleArray)
 
