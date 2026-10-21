@@ -103,10 +103,8 @@ window.addEventListener('load', async (event) => {
     gl.enable(gl.DEPTH_TEST)
     gl.enable(gl.BLEND)
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
-    let monkey = await fetch('monkey.json').then(res => res.json())
-    addNormals(monkey)
     //window.geom = setupGeomery(monkey)
-    window.geom = setupGeometry(tetrahedron)  ;
+    window.geom = setupGeometry(unitGridTest)  ;
     fillScreen()
     window.addEventListener('resize', fillScreen)
     requestAnimationFrame(tick)

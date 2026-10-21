@@ -1,0 +1,5 @@
+10 / 20 / 26 - - -
+
+First issue I am noticing - - - adding in a tetrahedron seems to work perfectly
+Adding in a pure plane does NOT work well
+
