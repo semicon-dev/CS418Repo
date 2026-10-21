@@ -1,0 +1,23 @@
+10 / 19 / 26 - - -
+Following along as prep for terrain MP, just a bit more practice - - -
+This will help me understand the lighting aspect!
+
+ // > First path to lighting the object, getting the surface normals.
+
+ // > File ONLY has one attributes
+
+ // > The artist didn't give me normals! Oh no!
+
+ // > Next we need to add the attributes into our vertex shader
+
+// > Use the colors to check / visualize what is going ON!!!!!!! argggg!!!!!
+
+// >What is thenormla at EVERY vertex ? 
+
+ ? Consider all neighboring triangles, each triangle DOES have a geommetrically defined normal!
+
+ > Edge1 cross Edge2 - -
+
+ > Scaling factor is great  - - - contributes size - - - 
+ 
+ >> Add up triangle normals !
