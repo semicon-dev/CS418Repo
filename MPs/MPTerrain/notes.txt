@@ -3,3 +3,26 @@
 First issue I am noticing - - - adding in a tetrahedron seems to work perfectly
 Adding in a pure plane does NOT work well
 
+for adding things to some object - - -
+const mesh = {
+    triangles: [],
+    atrributes:
+    [
+        [
+            [], // > Pos 0
+            [], // > Pos 1
+            ...
+        ], // > Positions
+        [
+            [], // > Col 1
+            [], // > Col 2
+            ...
+        ], // >  Colors
+    ]
+}
+
+> mesh.attributes[0].push([0.5, 0.0, -1.0]) // > Adds one item itself that is a nested list
+
+> mesh.triangles.push(0, 1, 2) // > Pushes multiple arguments
+
+> 

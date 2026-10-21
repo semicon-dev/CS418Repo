@@ -31,7 +31,8 @@ function draw(seconds) {
 
 
 
-    let m = m4mul(m4rotY(seconds), m4rotX(-Math.PI/2))
+    let m = m4mul(m4rotY(seconds * (1/5)), m4rotX(-Math.PI/2))
+    //let m = m4rotX(-Math.PI/2) ;
     let v = m4view([1,1,3], [0,0,0], [0,1,0])
     gl.uniformMatrix4fv(program.uniforms.mv, false, m4mul(v,m))
     gl.uniformMatrix4fv(program.uniforms.p, false, p)
@@ -60,7 +61,7 @@ function fillScreen() {
     canvas.style.height = ''
     if (window.gl) {
         gl.viewport(0,0, canvas.width, canvas.height)
-        window.p = m4perspNegZ(0.1, 10, 1, canvas.width, canvas.height)
+        window.p = m4perspNegZ(0.1, 10, 1, canvas.width, canvas.height) // I think this is already done
     }
 }
 
@@ -93,18 +94,30 @@ window.addEventListener('load', async (event) => {
         {antialias: false, depth:true, preserveDrawingBuffer:true}
     )
 
+    window.gridObj = makeGrid(2) ; //!!TEST
     // > Test adding in query selector here - - -
-
+    document.querySelector('#submit').addEventListener('click', event => {
+    const gridsize = Number(document.querySelector('#gridsize').value) || 2
+    const faults = Number(document.querySelector('#faults').value) || 0
+    // TO DO: generate a new gridsize-by-gridsize grid here, then apply faults to it
+        console.log(gridsize) ; // > FOR DEBUGGING THIS LOOKS PREEEEEETTTTTTTY GOODERINO!
+       gridObj = makeGrid(gridsize) ; 
+    })
 
     // > End test query selector add
+
     let vs = await fetch('vx.glsl').then(r => r.text())
     let fs = await fetch('fr.glsl').then(r => r.text())
     window.program = compileShader(vs,fs)
     gl.enable(gl.DEPTH_TEST)
     gl.enable(gl.BLEND)
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
-    //window.geom = setupGeomery(monkey)
-    window.geom = setupGeometry(unitGridTest)  ;
+    
+    //window.geom = setupGeometry(unitGridTest2)  ; // Testing
+
+    window.geom = setupGeometry(gridObj)  ;
+   
+    
     fillScreen()
     window.addEventListener('resize', fillScreen)
     requestAnimationFrame(tick)

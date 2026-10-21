@@ -4,7 +4,9 @@ layout(location=1) in vec3 normal ;
 uniform mat4 mv;
 uniform mat4 p ;
 out vec3 vnormal ;
+out vec4 testColor ;
 void main() {
     gl_Position = p * mv * position ;
     vnormal = mat3(mv) * normal ;
+    testColor = position ;
 }
