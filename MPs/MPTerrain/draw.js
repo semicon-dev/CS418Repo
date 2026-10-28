@@ -44,7 +44,7 @@ function draw(seconds) {
 /** Compute any time-varying or animated aspects of the scene */
 function tick(milliseconds) {
     let seconds = milliseconds / 1000;
-
+    window.globSeconds = seconds ;
     draw(seconds)
     requestAnimationFrame(tick)
 }
@@ -77,7 +77,7 @@ function addNormals(geom) {
         let p2 = geom.attributes[0][geom.triangles[i][2]]
         let e1 = sub(p1,p0)
         let e2 = sub(p2,p0)
-        let n = cross(e1,e2)
+        let n = cross(e1, e1)
         geom.attributes[ni][geom.triangles[i][0]] = add(geom.attributes[ni][geom.triangles[i][0]], n)
         geom.attributes[ni][geom.triangles[i][1]] = add(geom.attributes[ni][geom.triangles[i][1]], n)
         geom.attributes[ni][geom.triangles[i][2]] = add(geom.attributes[ni][geom.triangles[i][2]], n)
@@ -94,14 +94,22 @@ window.addEventListener('load', async (event) => {
         {antialias: false, depth:true, preserveDrawingBuffer:true}
     )
 
-    window.gridObj = makeGrid(2) ; //!!TEST
+    window.gridObj = makeGrid(2) ; // > Make base grid - - -
+    window.terrainObj = makeTerrain(0)
     // > Test adding in query selector here - - -
     document.querySelector('#submit').addEventListener('click', event => {
     const gridsize = Number(document.querySelector('#gridsize').value) || 2
     const faults = Number(document.querySelector('#faults').value) || 0
     // TO DO: generate a new gridsize-by-gridsize grid here, then apply faults to it
-        console.log(gridsize) ; // > FOR DEBUGGING THIS LOOKS PREEEEEETTTTTTTY GOODERINO!
+       // console.log(gridsize) ; // > !!DEBUG!!
        gridObj = makeGrid(gridsize) ; 
+       // console.log(gridObj["attributes"][0]) // debugging!!
+       console.log(gridObj["triangles"].length) // debugging!!
+
+       // > Now begin taking in number of faults
+       terrainObj = makeTerrain(faults) ;
+       window.geom = setupGeometry(terrainObj);   // debugging!!
+
     })
 
     // > End test query selector add
@@ -115,7 +123,7 @@ window.addEventListener('load', async (event) => {
     
     //window.geom = setupGeometry(unitGridTest2)  ; // Testing
 
-    window.geom = setupGeometry(gridObj)  ;
+    window.geom = setupGeometry(terrainObj)  ;
    
     
     fillScreen()
