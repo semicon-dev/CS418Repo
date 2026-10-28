@@ -214,7 +214,7 @@ var oct = {"triangles":
             let p = [0,0] ; // random point to be chosen
             let theta = 0 ; //random direction we have chosen
             let n = [0,0]
-            let testDelta = .125 ; // amount to raise /lower terrain by
+            let delta = .25 ; // amount to raise /lower terrain by
             let measure = 0 ;
             
 
@@ -233,15 +233,33 @@ var oct = {"triangles":
                 for(let i = 0 ; i < terrain.attributes[0].length ; i = i + 1){
                     measure = dot(sub([terrain.attributes[0][i][0], terrain.attributes[0][i][1]], p), n) // > Measure whether to raise or lower
                 if(measure > 0){ // > Raise
-                    terrain.attributes[0][i][2] += testDelta ;
+                    terrain.attributes[0][i][2] += delta ;
                 } else{ // > Lower
-                    terrain.attributes[0][i][2] -= testDelta ;
+                    terrain.attributes[0][i][2] -= delta ;
                 }
-                
+
                 }
                
-
             }
+
+                // Handle height normalization - - - 
+                let h_max = 0 ; 
+                let h_min = 0 ; 
+                let heights = [] ; 
+                let peak = 1.0 ; 
+                // get all heights
+                for(let i = 0 ; i < terrain.attributes[0].length ; i = i + 1){
+                    heights.push(terrain.attributes[0][i][2]) ; 
+                }
+                // console.log("heights", heights)
+                h_max = Math.max(...heights)
+                h_min = Math.min(...heights)
+                // console.log("max", h_max)
+                // console.log("min", h_min)
+
+                for(let i = 0 ; i < terrain.attributes[0].length ; i = i + 1){
+                    terrain.attributes[0][i][2] = peak * (terrain.attributes[0][i][2] - .5 * (h_max + h_min)) / (h_max - h_min)
+                }
         }
 
         return terrain ; 
