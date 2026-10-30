@@ -18,7 +18,7 @@ function draw(seconds) {
 
 
 
-    let eye_position = [3 * Math.cos(seconds * .4), 1.5, 3 * Math.sin(seconds * .4)] // > Eye position in world coords
+    let eye_position = [3 * Math.cos(seconds * .4), 1.25, 3 * Math.sin(seconds * .4)] // > Eye position in world coords
     gl.uniform3fv(program.uniforms.eye_position, eye_position)
     // > NOTE!! We will need to rotate this eye position vector ( DONE!)
 
@@ -32,12 +32,14 @@ function draw(seconds) {
     gl.uniformMatrix4fv(program.uniforms.p, false, p)
 
     // > Create LIGHT SOURCE!!
-    let light_direction = normalize([1, 3, 1]) // > Again, this should stay constant in world coordinates
-    
+    let light_direction = normalize([1, 1.25, 1]) // > Again, this should stay constant in world coordinates
+     // > Should we just calculate the halfway vector within the shader????
     let halfway_vec = normalize(add(light_direction, [0,0,1])) 
     gl.uniform3fv(program.uniforms.lightdir, light_direction)
     gl.uniform3fv(program.uniforms.lightcolor, ([1,1,1]))
-    gl.uniform3fv(program.uniforms.halfway, halfway_vec)
+    gl.uniform3fv(program.uniforms.halfway, halfway_vec) // > Again, not sure if we directly need this if clculating
+    // via the Phong approximation, (interpolated world space position of vertices - eye location)
+    // > Handle within the fragment shader?
     
     gl.drawElements(geom.mode, geom.count, geom.type, 0)
 
