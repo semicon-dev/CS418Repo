@@ -15,26 +15,50 @@ function draw(seconds) {
 
     gl.uniform4fv(program.uniforms.color, IlliniOrange)
 
-    // > Source 1
-    let ld = normalize([1,0,1]) ;
-    let h = normalize(add(ld, [0,0,1])) // We are always looking down the z axis
-    gl.uniform3fv(program.uniforms.lightdir, ld)
-    gl.uniform3fv(program.uniforms.lightcolor, ([1,1,1]))
-    gl.uniform3fv(program.uniforms.halfway, h)
 
 
 
+    let eye_position = [3 * Math.cos(seconds * .4), 1.5, 3 * Math.sin(seconds * .4)] // > Eye position in world coords
+    gl.uniform3fv(program.uniforms.eye_position, eye_position)
+    // > NOTE!! We will need to rotate this eye position vector ( DONE!)
 
+    // Create model matrix and position or model correctly within space
+    let MM = m4rotX(-Math.PI/2) ; // Model matrix to rotate our terrain slightly
+    gl.uniformMatrix4fv(program.uniforms.MM, false, MM)
 
-    let m = m4mul(m4rotY(seconds * (1/5)), m4rotX(-Math.PI/2))
-    //let m = m4rotX(-Math.PI/2) ;
-    let v = m4view([1,2,3], [0,0,0], [0,1,0])
-    gl.uniformMatrix4fv(program.uniforms.mv, false, m4mul(v,m))
+    // > Create view matrix 
+    let VM = m4view(eye_position, [0,0,0], [0,1,0])
+    gl.uniformMatrix4fv(program.uniforms.VM, false, VM)
     gl.uniformMatrix4fv(program.uniforms.p, false, p)
+
+    // > Create LIGHT SOURCE!!
+    let light_direction = normalize([1, 3, 1]) // > Again, this should stay constant in world coordinates
+    
+    let halfway_vec = normalize(add(light_direction, [0,0,1])) 
+    gl.uniform3fv(program.uniforms.lightdir, light_direction)
+    gl.uniform3fv(program.uniforms.lightcolor, ([1,1,1]))
+    gl.uniform3fv(program.uniforms.halfway, halfway_vec)
     
     gl.drawElements(geom.mode, geom.count, geom.type, 0)
 
 }
+
+// old view coord stuff - - -
+//   //let m = m4mul(m4rotY(seconds * (1/5)), m4rotX(-Math.PI/2))
+//     let m = m4rotX(-Math.PI/2) ;
+//     let v = m4view([1,1.5 ,3], [0,0,0], [0,1,0])
+//     gl.uniformMatrix4fv(program.uniforms.mv, false, m4mul(v,m))
+//     gl.uniformMatrix4fv(program.uniforms.p, false, p)
+
+//     // > Source 1
+//     let ld = normalize([1,3,1]) ;
+//     let h = normalize(add(ld, [0,0,1])) // We are always looking down the z axis
+//     gl.uniform3fv(program.uniforms.lightdir, ld)
+//     gl.uniform3fv(program.uniforms.lightcolor, ([1,1,1]))
+//     gl.uniform3fv(program.uniforms.halfway, h)
+    
+//     gl.drawElements(geom.mode, geom.count, geom.type, 0)
+
 
 /** Compute any time-varying or animated aspects of the scene */
 function tick(milliseconds) {
