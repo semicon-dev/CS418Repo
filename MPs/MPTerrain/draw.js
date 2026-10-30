@@ -16,24 +16,19 @@ function draw(seconds) {
     gl.uniform4fv(program.uniforms.color, IlliniOrange)
 
     // > Source 1
-    let ld = normalize([1,1,1]) ;
+    let ld = normalize([1,0,1]) ;
     let h = normalize(add(ld, [0,0,1])) // We are always looking down the z axis
     gl.uniform3fv(program.uniforms.lightdir, ld)
     gl.uniform3fv(program.uniforms.lightcolor, ([1,1,1]))
     gl.uniform3fv(program.uniforms.halfway, h)
 
-    // > Source 2
-    let ld2 = normalize([0,-1,1]) ;
-    let h2 = normalize(add(ld2, [0,0,1])) // We are always looking down the z axis
-    gl.uniform3fv(program.uniforms.lightdir2, ld2)
-    gl.uniform3fv(program.uniforms.lightcolor2, ([0, 0.5,0.2]))
-    gl.uniform3fv(program.uniforms.halfway2, h2)
+
 
 
 
     let m = m4mul(m4rotY(seconds * (1/5)), m4rotX(-Math.PI/2))
     //let m = m4rotX(-Math.PI/2) ;
-    let v = m4view([1,1,3], [0,0,0], [0,1,0])
+    let v = m4view([1,2,3], [0,0,0], [0,1,0])
     gl.uniformMatrix4fv(program.uniforms.mv, false, m4mul(v,m))
     gl.uniformMatrix4fv(program.uniforms.p, false, p)
     
@@ -67,25 +62,64 @@ function fillScreen() {
 
 function addNormals(geom) {
     let ni = geom.attributes.length
-    geom.attributes.push([])
+    geom.attributes.push([]) // > Push a new attribute (the normals) (at next available attributes spot)
     for(let i = 0; i < geom.attributes[0].length; i+=1) {
         geom.attributes[ni].push([0,0,0])
     }
-    for(let i = 0; i < geom.triangles.length; i+=1) {
-        let p0 = geom.attributes[0][geom.triangles[i][0]]
-        let p1 = geom.attributes[0][geom.triangles[i][1]]
-        let p2 = geom.attributes[0][geom.triangles[i][2]]
-        let e1 = sub(p1,p0)
-        let e2 = sub(p2,p0)
-        let n = cross(e1, e1)
-        geom.attributes[ni][geom.triangles[i][0]] = add(geom.attributes[ni][geom.triangles[i][0]], n)
-        geom.attributes[ni][geom.triangles[i][1]] = add(geom.attributes[ni][geom.triangles[i][1]], n)
-        geom.attributes[ni][geom.triangles[i][2]] = add(geom.attributes[ni][geom.triangles[i][2]], n)
+
+    let g_len = Math.sqrt(geom.attributes[0].length) // grid length
+
+    for(let row = 0; row < g_len; row+=1) { // > add normal for every vertex
+        for(let col = 0 ; col < g_len ; col += 1){
+            // > Create p_n
+            if(row != 0){
+                p_n =  geom.attributes[0][(row - 1) * g_len + col]
+            } else { p_n = geom.attributes[0][(row) * g_len + col]}
+            // > Create p_s
+            if(row < (g_len - 1)){
+                p_s =  geom.attributes[0][(row + 1) * g_len + col]
+            } else { p_s = geom.attributes[0][(row) * g_len + col]}
+            // > Create p_e
+            if(col < (g_len - 1)){
+                p_e =  geom.attributes[0][(row) * g_len + col + 1]
+            } else { p_e = geom.attributes[0][(row) * g_len + col]}
+
+            // > Create p_s
+            if(col != 0){
+                p_w =  geom.attributes[0][(row) * g_len + col - 1]
+            } else { p_w = geom.attributes[0][(row) * g_len + col]}
+            v_ns = sub(p_n, p_s)
+            v_ew = sub(p_w, p_e)
+            v_norm = cross(v_ns, v_ew)
+
+            geom.attributes[ni][g_len * row + col] = add(geom.attributes[ni][g_len * row + col], v_norm)
+        } 
     }
+
+
     for(let i = 0; i < geom.attributes[0].length; i+=1) {
         geom.attributes[ni][i] = normalize(geom.attributes[ni][i])
     }
 }
+
+
+
+//   for(let i = 0; i < geom.attributes[0]; i+=1) { // > add normal for every vertex
+//         let p_v = geom.attributes[0][i]
+//         let p_n = 
+//         let p_s = 
+//         let p_e = 
+//         let p_w = 
+
+
+
+//         geom.attributes[ni][geom.triangles[i][0]] = add(geom.attributes[ni][geom.triangles[i][0]], n)
+//         geom.attributes[ni][geom.triangles[i][1]] = add(geom.attributes[ni][geom.triangles[i][1]], n)
+//         geom.attributes[ni][geom.triangles[i][2]] = add(geom.attributes[ni][geom.triangles[i][2]], n)
+//     }
+//     for(let i = 0; i < geom.attributes[0].length; i+=1) {
+//         geom.attributes[ni][i] = normalize(geom.attributes[ni][i])
+//     }
 
 /** Compile, link, set up geometry */
 window.addEventListener('load', async (event) => {
@@ -108,8 +142,9 @@ window.addEventListener('load', async (event) => {
 
        // > Now begin taking in number of faults
        terrainObj = makeTerrain(faults) ;
+       addNormals(terrainObj) // test
        window.geom = setupGeometry(terrainObj);   // debugging!!
-
+       
     })
 
     // > End test query selector add
