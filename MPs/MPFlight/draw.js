@@ -1,9 +1,10 @@
-/** Draw one frame */
-// TESTING
+// > Initialize eye position values and forward vector
+window.eye_position = [2.5, 3, 2.5] // > Eye position in world coords
+// > eye forward dir
+window.eye_f = normalize(mul(eye_position, -1)) // > Normalized starting forward position!
+// window.eye_f = [1,1,1]
+// > Note that global up in y hat
 
-
-
-// TESTING END
 
 
 function draw(seconds) {
@@ -15,19 +16,47 @@ function draw(seconds) {
 
     gl.uniform4fv(program.uniforms.color, IlliniOrange)
 
+   // > Handle matrix creation
+
+   
+
+  
+    // > Attempt to construct view Matrix
+    let T = [1, 0, 0, 0,
+            0, 1, 0, 0, 
+            0, 0, 1, 0, 
+            -eye_position[0], -eye_position[1], -eye_position[2], 1
+            ]
+    
+    // > right direction
+    let r_dir = normalize(cross(eye_f, [0,1,0])) // > Cross products only defined in R3 
+    // > Camera up direction
+    let u_dir = normalize(cross(r_dir, eye_f))
+    let R = [ r_dir[0], u_dir[0], -eye_f[0], 0 ,
+            r_dir[1], u_dir[1], -eye_f[1], 0 ,
+            r_dir[2], u_dir[2], -eye_f[2], 0,
+            0, 0, 0, 1
+            ]
+    
+    // > Create view matrix
+
+    // > Respond to user input (only takes effect on future cycles!)
 
 
 
-    let eye_position = [3 * Math.cos(seconds * .4), 1.25, 3 * Math.sin(seconds * .4)] // > Eye position in world coords
+
+    // > End respond to user input
+    let VM = m4mul(R, T) ;
+    // > End handle eye repositioning and such
     gl.uniform3fv(program.uniforms.eye_position, eye_position)
-    // > NOTE!! We will need to rotate this eye position vector ( DONE!)
+    
 
     // Create model matrix and position or model correctly within space
     let MM = m4rotX(-Math.PI/2) ; // Model matrix to rotate our terrain slightly
     gl.uniformMatrix4fv(program.uniforms.MM, false, MM)
 
     // > Create view matrix 
-    let VM = m4view(eye_position, [0,0,0], [0,1,0])
+    //let VM = m4view(eye_position, [0,0,0], [0,1,0])
     gl.uniformMatrix4fv(program.uniforms.VM, false, VM)
     gl.uniformMatrix4fv(program.uniforms.p, false, p)
 
@@ -42,24 +71,109 @@ function draw(seconds) {
     // > Handle within the fragment shader?
     
     gl.drawElements(geom.mode, geom.count, geom.type, 0)
+    if(keysBeingPressed['ArrowUp']){
+    console.log("You are pressing ArrowUp!") ;
+    }
 
-}
+    // > Reposition eye based on user input
+    // Note that this only takes effect on "future ticks/cycles"
+    if(keysBeingPressed['w']){
+        eye_position = add(eye_position, mul(eye_f, 0.05))
+    }
+    if(keysBeingPressed['s']){
+        eye_position = add(eye_position, mul(eye_f, -0.05))
+    }
+    if(keysBeingPressed['d']){
+        eye_position = add(eye_position, mul(r_dir, 0.05))
+    }
+    if(keysBeingPressed['a']){
+        eye_position = add(eye_position, mul(r_dir, -0.05))
+    }
 
-// old view coord stuff - - -
-//   //let m = m4mul(m4rotY(seconds * (1/5)), m4rotX(-Math.PI/2))
-//     let m = m4rotX(-Math.PI/2) ;
-//     let v = m4view([1,1.5 ,3], [0,0,0], [0,1,0])
-//     gl.uniformMatrix4fv(program.uniforms.mv, false, m4mul(v,m))
-//     gl.uniformMatrix4fv(program.uniforms.p, false, p)
-
-//     // > Source 1
-//     let ld = normalize([1,3,1]) ;
-//     let h = normalize(add(ld, [0,0,1])) // We are always looking down the z axis
-//     gl.uniform3fv(program.uniforms.lightdir, ld)
-//     gl.uniform3fv(program.uniforms.lightcolor, ([1,1,1]))
-//     gl.uniform3fv(program.uniforms.halfway, h)
+    // > Change direction based on user input
+    let c = Math.cos(0.03)
+    let s = Math.sin(0.03)
+    let t = 1 - c
     
-//     gl.drawElements(geom.mode, geom.count, geom.type, 0)
+    if(keysBeingPressed['ArrowUp']){
+        // > Rotate forward vector around right vector
+        let curR = [
+    r_dir[0]*r_dir[0]*t + c,
+    r_dir[0]*r_dir[1]*t + r_dir[2]*s,
+    r_dir[0]*r_dir[2]*t - r_dir[1]*s,
+
+    r_dir[0]*r_dir[1]*t - r_dir[2]*s,
+    r_dir[1]*r_dir[1]*t + c,
+    r_dir[1]*r_dir[2]*t + r_dir[0]*s,
+
+    r_dir[0]*r_dir[2]*t + r_dir[1]*s,
+    r_dir[1]*r_dir[2]*t - r_dir[0]*s,
+    r_dir[2]*r_dir[2]*t + c
+    ]
+        eye_f = m3mul(curR, eye_f)
+    }
+
+    if(keysBeingPressed['ArrowDown']){
+        // > Rotate forward vector around right vector
+        s = -s ; // > for opposite direction roation note sine is even, cos in odd
+    let curR = [
+    r_dir[0]*r_dir[0]*t + c,
+    r_dir[0]*r_dir[1]*t + r_dir[2]*s,
+    r_dir[0]*r_dir[2]*t - r_dir[1]*s,
+
+    r_dir[0]*r_dir[1]*t - r_dir[2]*s,
+    r_dir[1]*r_dir[1]*t + c,
+    r_dir[1]*r_dir[2]*t + r_dir[0]*s,
+
+    r_dir[0]*r_dir[2]*t + r_dir[1]*s,
+    r_dir[1]*r_dir[2]*t - r_dir[0]*s,
+    r_dir[2]*r_dir[2]*t + c
+    ]
+        eye_f = m3mul(curR, eye_f)
+    }
+
+    if(keysBeingPressed['ArrowRight']){
+        // > Rotate forward vector around right vector
+        let globUp = [0, 1, 0]
+        s = -s
+    let curR = [
+    globUp[0]*globUp[0]*t + c,
+    globUp[0]*globUp[1]*t + globUp[2]*s,
+    globUp[0]*globUp[2]*t - globUp[1]*s,
+
+    globUp[0]*globUp[1]*t - globUp[2]*s,
+    globUp[1]*globUp[1]*t + c,
+    globUp[1]*globUp[2]*t + globUp[0]*s,
+
+    globUp[0]*globUp[2]*t + globUp[1]*s,
+    globUp[1]*globUp[2]*t - globUp[0]*s,
+    globUp[2]*globUp[2]*t + c
+    ]
+        eye_f = m3mul(curR, eye_f)
+    }
+       if(keysBeingPressed['ArrowLeft']){
+        // > Rotate forward vector around right vector
+        let globUp = [0, 1, 0]
+        
+    let curR = [
+    globUp[0]*globUp[0]*t + c,
+    globUp[0]*globUp[1]*t + globUp[2]*s,
+    globUp[0]*globUp[2]*t - globUp[1]*s,
+
+    globUp[0]*globUp[1]*t - globUp[2]*s,
+    globUp[1]*globUp[1]*t + c,
+    globUp[1]*globUp[2]*t + globUp[0]*s,
+
+    globUp[0]*globUp[2]*t + globUp[1]*s,
+    globUp[1]*globUp[2]*t - globUp[0]*s,
+    globUp[2]*globUp[2]*t + c
+    ]
+        eye_f = m3mul(curR, eye_f)
+    }
+
+
+   // > End reposition eye based on user input
+}
 
 
 /** Compute any time-varying or animated aspects of the scene */
@@ -128,6 +242,22 @@ function addNormals(geom) {
     }
 }
 
+// > Test add key event listener
+// - - - - - - - - - - - - - - -
+window.keysBeingPressed = {}
+window.addEventListener('keydown', event => keysBeingPressed[event.key] = true)
+window.addEventListener('keyup', event => keysBeingPressed[event.key] = false)
+
+/*
+The way that I am interpretting this - 
+add an event listener, which listens for a "keydown event" if yes, index into keybeingpressed list we created
+when indexxing into this, we can set that key value pair, looked up via the specific key to be true or false
+
+*/
+// > End test add key event listener
+// - - - - - - - - - - - - - - - - -
+
+
 
 /** Compile, link, set up geometry */
 window.addEventListener('load', async (event) => {
@@ -143,7 +273,7 @@ window.addEventListener('load', async (event) => {
     window.geom = setupGeometry(terrainObj);   // debugging!!
     // > End create terrain
 
-    // > End test query selector add
+    
 
     let vs = await fetch('vx.glsl').then(r => r.text())
     let fs = await fetch('fr.glsl').then(r => r.text())
@@ -156,9 +286,12 @@ window.addEventListener('load', async (event) => {
 
     window.geom = setupGeometry(terrainObj)  ;
    
-    
+   // console.log("testout")
+
+
     fillScreen()
     window.addEventListener('resize', fillScreen)
     requestAnimationFrame(tick)
+    
 })
 

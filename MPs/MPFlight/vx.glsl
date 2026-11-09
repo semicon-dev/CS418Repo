@@ -3,7 +3,7 @@ layout(location=0) in vec4 position;
 layout(location=1) in vec3 normal ;
 uniform mat4 MM ; // > Model Matrix
 uniform mat4 VM ; // > View Matrix
-uniform mat4 p ;
+uniform mat4 p ; // > Perspective
 
 out vec3 vnormal ;
 out vec4 testColor ;
