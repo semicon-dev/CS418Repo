@@ -93,22 +93,22 @@ function draw(seconds) {
     // > Change direction based on user input
     let c = Math.cos(0.03)
     let s = Math.sin(0.03)
-    let t = 1 - c
+    let c_1 = 1 - c
     
     if(keysBeingPressed['ArrowUp']){
         // > Rotate forward vector around right vector
         let curR = [
-    r_dir[0]*r_dir[0]*t + c,
-    r_dir[0]*r_dir[1]*t + r_dir[2]*s,
-    r_dir[0]*r_dir[2]*t - r_dir[1]*s,
+    r_dir[0]*r_dir[0]*c_1 + c,
+    r_dir[0]*r_dir[1]*c_1 + r_dir[2]*s,
+    r_dir[0]*r_dir[2]*c_1 - r_dir[1]*s,
 
-    r_dir[0]*r_dir[1]*t - r_dir[2]*s,
-    r_dir[1]*r_dir[1]*t + c,
-    r_dir[1]*r_dir[2]*t + r_dir[0]*s,
+    r_dir[0]*r_dir[1]*c_1 - r_dir[2]*s,
+    r_dir[1]*r_dir[1]*c_1 + c,
+    r_dir[1]*r_dir[2]*c_1 + r_dir[0]*s,
 
-    r_dir[0]*r_dir[2]*t + r_dir[1]*s,
-    r_dir[1]*r_dir[2]*t - r_dir[0]*s,
-    r_dir[2]*r_dir[2]*t + c
+    r_dir[0]*r_dir[2]*c_1 + r_dir[1]*s,
+    r_dir[1]*r_dir[2]*c_1 - r_dir[0]*s,
+    r_dir[2]*r_dir[2]*c_1 + c
     ]
         eye_f = m3mul(curR, eye_f)
     }
@@ -117,17 +117,17 @@ function draw(seconds) {
         // > Rotate forward vector around right vector
         s = -s ; // > for opposite direction roation note sine is even, cos in odd
     let curR = [
-    r_dir[0]*r_dir[0]*t + c,
-    r_dir[0]*r_dir[1]*t + r_dir[2]*s,
-    r_dir[0]*r_dir[2]*t - r_dir[1]*s,
+    r_dir[0]*r_dir[0]*c_1 + c,
+    r_dir[0]*r_dir[1]*c_1 + r_dir[2]*s,
+    r_dir[0]*r_dir[2]*c_1 - r_dir[1]*s,
 
-    r_dir[0]*r_dir[1]*t - r_dir[2]*s,
-    r_dir[1]*r_dir[1]*t + c,
-    r_dir[1]*r_dir[2]*t + r_dir[0]*s,
+    r_dir[0]*r_dir[1]*c_1 - r_dir[2]*s,
+    r_dir[1]*r_dir[1]*c_1 + c,
+    r_dir[1]*r_dir[2]*c_1 + r_dir[0]*s,
 
-    r_dir[0]*r_dir[2]*t + r_dir[1]*s,
-    r_dir[1]*r_dir[2]*t - r_dir[0]*s,
-    r_dir[2]*r_dir[2]*t + c
+    r_dir[0]*r_dir[2]*c_1 + r_dir[1]*s,
+    r_dir[1]*r_dir[2]*c_1 - r_dir[0]*s,
+    r_dir[2]*r_dir[2]*c_1 + c
     ]
         eye_f = m3mul(curR, eye_f)
     }
@@ -137,17 +137,17 @@ function draw(seconds) {
         let globUp = [0, 1, 0]
         s = -s
     let curR = [
-    globUp[0]*globUp[0]*t + c,
-    globUp[0]*globUp[1]*t + globUp[2]*s,
-    globUp[0]*globUp[2]*t - globUp[1]*s,
+    globUp[0]*globUp[0]*c_1 + c,
+    globUp[0]*globUp[1]*c_1 + globUp[2]*s,
+    globUp[0]*globUp[2]*c_1 - globUp[1]*s,
 
-    globUp[0]*globUp[1]*t - globUp[2]*s,
-    globUp[1]*globUp[1]*t + c,
-    globUp[1]*globUp[2]*t + globUp[0]*s,
+    globUp[0]*globUp[1]*c_1 - globUp[2]*s,
+    globUp[1]*globUp[1]*c_1 + c,
+    globUp[1]*globUp[2]*c_1 + globUp[0]*s,
 
-    globUp[0]*globUp[2]*t + globUp[1]*s,
-    globUp[1]*globUp[2]*t - globUp[0]*s,
-    globUp[2]*globUp[2]*t + c
+    globUp[0]*globUp[2]*c_1 + globUp[1]*s,
+    globUp[1]*globUp[2]*c_1 - globUp[0]*s,
+    globUp[2]*globUp[2]*c_1 + c
     ]
         eye_f = m3mul(curR, eye_f)
     }
@@ -156,17 +156,17 @@ function draw(seconds) {
         let globUp = [0, 1, 0]
         
     let curR = [
-    globUp[0]*globUp[0]*t + c,
-    globUp[0]*globUp[1]*t + globUp[2]*s,
-    globUp[0]*globUp[2]*t - globUp[1]*s,
+    globUp[0]*globUp[0]*c_1 + c,
+    globUp[0]*globUp[1]*c_1 + globUp[2]*s,
+    globUp[0]*globUp[2]*c_1 - globUp[1]*s,
 
-    globUp[0]*globUp[1]*t - globUp[2]*s,
-    globUp[1]*globUp[1]*t + c,
-    globUp[1]*globUp[2]*t + globUp[0]*s,
+    globUp[0]*globUp[1]*c_1 - globUp[2]*s,
+    globUp[1]*globUp[1]*c_1 + c,
+    globUp[1]*globUp[2]*c_1 + globUp[0]*s,
 
-    globUp[0]*globUp[2]*t + globUp[1]*s,
-    globUp[1]*globUp[2]*t - globUp[0]*s,
-    globUp[2]*globUp[2]*t + c
+    globUp[0]*globUp[2]*c_1 + globUp[1]*s,
+    globUp[1]*globUp[2]*c_1 - globUp[0]*s,
+    globUp[2]*globUp[2]*c_1 + c
     ]
         eye_f = m3mul(curR, eye_f)
     }
