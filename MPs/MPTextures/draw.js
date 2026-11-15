@@ -14,11 +14,19 @@ window.texShaderOn = 0 ; // I am using a flag here because I barely understand t
 function draw(seconds) {
     gl.clearColor(...IlliniBlue) // f(...[1,2,3]) means f(1,2,3)
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
-    gl.useProgram(program)
-
+    gl.useProgram(program) // > !! I think I definitely need this in here to swap between programs being used
     gl.bindVertexArray(geom.vao)
 
+    if(texShaderOn == 0){ // I think we only need this color stuff when using shader 1
     gl.uniform4fv(program.uniforms.color, curColor)
+    }
+
+    // > Do texture stuff here? !!
+    if(texShaderOn == 1){
+        let slot = 0 ; 
+        gl.uniform1i(program.uniforms.currentTexture, slot)
+    }
+    // > End possible texture stuff
 
 
     let eye_position = [3 * Math.cos(seconds * .4), 1.25, 3 * Math.sin(seconds * .4)] // > Eye position in world coords
@@ -114,6 +122,24 @@ function addNormals(geom) {
     }
 }
 
+// > Add texture coord to geometry
+function addTexcoord(geom){
+    let ni = geom.attributes.length
+    geom.attributes.push([]) // > Push a new attribute (the texcoord) (at next available attributes spot)
+    for(let i = 0; i < geom.attributes[0].length; i+=1) {
+        geom.attributes[ni].push([0,0])
+    }
+    // > Need to add a texcoord \forall vertices? 
+    let g_len = Math.sqrt(geom.attributes[0].length) ; // Get grid length
+    let offset = 1 / g_len
+
+    for(let row = 0 ; row < g_len ; row += 1){
+            for(let col = 0 ; col < g_len ; col += 1){
+                geom.attributes[ni][g_len * row + col] = ([row * offset, col * offset])
+            }
+        }
+}
+
 // > For textures MP : I believe that this is the setup are and we need to
 //create a second shader program
 // > I think that we should be able to do this simply by clicking "enter"
@@ -128,6 +154,7 @@ window.addEventListener('load', async (event) => {
     window.gridObj = makeGrid(50) ; // > Make base grid - - -
     window.terrainObj = makeTerrain(50)
     addNormals(terrainObj) // test
+    addTexcoord(terrainObj)
     // window.program = compileShader(vs,fs_notex) // > will need to swap compiled shaders upon text input
     
     // > Test adding in query selector here - - -
@@ -143,6 +170,7 @@ window.addEventListener('load', async (event) => {
        // > Now begin taking in number of faults
        terrainObj = makeTerrain(faults) ;
        addNormals(terrainObj) // test
+       addTexcoord(terrainObj)
        window.geom = setupGeometry(terrainObj);   // debugging!!
        
     })
@@ -170,6 +198,28 @@ window.addEventListener('load', async (event) => {
             window.program = compileShader(vs,fs_tex)
             texShaderOn = 1 ;
             // > Now we just need to write the shader and send this puppy to the GPU
+            let slot = 0 ;
+            let texture = gl.createTexture()
+            gl.activeTexture(gl.TEXTURE0 + slot) ;
+            gl.bindTexture(gl.TEXTURE_2D, texture) ;
+
+            // CLAMPING
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+            // Zooming in and Zooming out
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+            // Send pixel data to gpu
+            gl.texImage2D(
+                gl.TEXTURE_2D, //dest slot
+                0, // mipmap level,
+                gl.RGBA, 
+                gl.RGBA, 
+                gl.UNSIGNED_BYTE, 
+                img, // SOURCE DATA< PROVIDED AS A WINDOW
+            ) ;
+            gl.generateMipmap(gl.TEXTURE_2D)
+
 
         })
 

@@ -7,3 +7,6 @@
 
 
 // > Ok, now add the fucking ummmmm actual texture mapping shit
+
+> Onto texture mapping : issue because we never send color to the texture frag shader
+> This is actually fine because we dont care about color here (this comes from the flag setting thing I did earleir)
