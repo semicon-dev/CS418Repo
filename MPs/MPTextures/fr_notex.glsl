@@ -19,9 +19,8 @@ void main() {
     vec3 local_halfway = normalize(lightdir + dir_to_eye); 
 
     float lambert = max(dot(vnormal, lightdir), 0.0) ; 
-    float scale = 1.0 ; 
     float blinn = pow(max(dot(vnormal, local_halfway), 0.0), 100.0) ;
-    fragColor = vec4(color.rgb * (lightcolor * lambert) +  (blinn * lightcolor) * scale + color.rgb * 0.15, color.a);
+    fragColor = vec4(color.rgb * (lightcolor * lambert) * (1.0 - color.a) +  (blinn * lightcolor) * 3.0 * (color.a), 1.0);
     // Add ambient term also
 
    // fragColor = testColor ; 
