@@ -21,8 +21,8 @@ void main() {
     vec3 local_halfway = normalize(lightdir + dir_to_eye); 
 
     float lambert = max(dot(vnormal, lightdir), 0.0) ; 
-    fragColor = vec4(texture(currentTexture, texCoordFrag).rgb * (lightcolor * lambert), 1.0);
-
+   // fragColor = vec4(texture(currentTexture, texCoordFrag).rgb * (lightcolor * lambert), 1.0); (correct)
+    fragColor = texture(currentTexture, texCoordFrag) ;
    // fragColor = texture(currentTexture, texCoordFrag) ; 
 
    // fragColor = testColor ; 
