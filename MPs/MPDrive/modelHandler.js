@@ -335,7 +335,7 @@ var oct = {"triangles":
         // let lerpedHeightDebug = terrainObj.attributes[0][curY_dn * sz + curX_dn][2] //debug!!
         // console.log(lerpedHeightDebug) //debug!!
         // console.log(lerpedHeight)
-        eye_position[1] = lerpedHeight + 0.175
+        eye_position[1] = lerpedHeight + 0.3
         }
         
         
