@@ -63,16 +63,17 @@ function draw(seconds) {
     gl.uniformMatrix4fv(program.uniforms.p, false, p)
 
     // > Create LIGHT SOURCE!!
-    let light_direction = normalize([1, 1.25, 1]) // > Again, this should stay constant in world coordinates
-     // > Should we just calculate the halfway vector within the shader????
-    let halfway_vec = normalize(add(light_direction, [0,0,1])) 
+    let light_direction = normalize([1, 1, 1]) // > constant in world space coordinates
+
+     // > For drive MP, we need to actually do some more work on this halfway vector
+    let halfway_vec = normalize(add(light_direction, eye_position)) 
     gl.uniform3fv(program.uniforms.lightdir, light_direction)
     gl.uniform3fv(program.uniforms.lightcolor, ([1,1,1]))
-    gl.uniform3fv(program.uniforms.halfway, halfway_vec) // > Again, not sure if we directly need this if clculating
-    // via the Phong approximation, (interpolated world space position of vertices - eye location)
-    // > Handle within the fragment shader?
+    gl.uniform3fv(program.uniforms.halfway, halfway_vec) 
+    // > Should we interpolate world space positions rather than the vertices? !! ? - not sure what we need to  do to fix lighting
     
     gl.drawElements(geom.mode, geom.count, geom.type, 0)
+
     if(keysBeingPressed['ArrowUp']){
    // console.log("You are pressing ArrowUp!") ;
    //debugging
@@ -276,9 +277,9 @@ window.addEventListener('load', async (event) => {
     )
 
     // > Create terrain
-    window.gridObj = makeGrid(50) ; // > Make base grid - - -
-    window.terrainObj = makeTerrain(50)
-    window.gridSizeGlob = 50// ok
+    window.gridObj = makeGrid(30) ; // > Make base grid - - -
+    window.terrainObj = makeTerrain(140)
+    window.gridSizeGlob = 30// ok
     addNormals(terrainObj) // test
     window.geom = setupGeometry(terrainObj);   // debugging!!
     // > End create terrain

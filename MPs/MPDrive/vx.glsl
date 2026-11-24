@@ -13,6 +13,8 @@ void main() {
     gl_Position = p*VM*MM* position ; // > GL position still needs the view and model matrices applied to it
     vnormal = normalize(mat3(MM) * normal) ; // > rotate normals via the model matrix
    // testColor = position ; // > NO LONGER USING THIS!!
-    position_to_frag = (MM*position).xyz ; // give our vertex position to fragment shader for blinn phong calculations
+    position_to_frag = (MM*position).xyz ; // give our vertex position to fragment shader for blinn-phong calculations
     // > NEED TO DO MM*position to make sure it is in WORLD coords, not OBJECT coord
+
+    // > Consider adjusting position to frag, as it appears that the vertex position is a poor estimate
 }
