@@ -140,7 +140,7 @@ function applyWeathering(smoothingFactor) {
     let n = terrainObj.attributes[0].length // > gridsize squared
     let sz = Math.sqrt(n) ; // > Should give us the size of our actual grid
 
-    if(smoothingFactor = 0 ){ // > Return to unweathered terrain
+    if(smoothingFactor === 0 ){ // > Return to unweathered terrain
         terrainWeathered = structuredClone(terrainObj) //!! This whole block might be unecessary - - -
         return ; // > Who care tho, if causes issues / doesn't change operation in the future I will get rid of it
     }
