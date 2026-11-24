@@ -1,8 +1,8 @@
 #version 300 es
 precision highp float;
 uniform vec4 color;
-
-
+uniform vec4 fogColor ; 
+uniform float  fogStrength ; 
 uniform vec3 lightdir ; // Direction to the light
 uniform vec3 lightcolor ; // color of the light
 uniform vec3 halfway ; // may not actually use this
@@ -21,7 +21,12 @@ void main() {
     float lambert = max(dot(normalize(vnormal), lightdir), 0.0) ; 
     float scale = 1.0 ; 
     float blinn = pow(max(dot(normalize(vnormal), local_halfway), 0.0), 100.0) ;
-    fragColor = vec4(color.rgb * (lightcolor * lambert) +  (blinn * lightcolor) * scale + color.rgb * 0.15, color.a);
+
+    float f = fogStrength; 
+    float d = 1.0 / gl_FragCoord.w ; 
+    float v = pow(2.7182818, - f * d) ; 
+    vec4 initFragColor =  vec4(color.rgb * (lightcolor * lambert) +  (blinn * lightcolor) * scale + color.rgb * 0.15, color.a);
+    fragColor = initFragColor*v + (1.0 - v)*fogColor.rgba; 
     // Add ambient term also
 
    // fragColor = testColor ; 

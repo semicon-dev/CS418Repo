@@ -4,8 +4,13 @@ window.eye_position = [2.5, 3, 2.5] // > Eye position in world coords
 window.eye_f = normalize(mul(eye_position, -1)) // > Normalized starting forward position!
 // window.eye_f = [1,1,1]
 // > Note that global up in y hat
+window.fogStrength = 0.5 ; 
+window.oldFogStrength = 0.5 ; 
+window.fogOnFlag = true ; 
 
-
+window.hLock = 0 ; 
+window.gLock = 0 ; 
+window.fLock = 0 ;
 
 function draw(seconds) {
     gl.clearColor(...IlliniBlue) // f(...[1,2,3]) means f(1,2,3)
@@ -15,7 +20,8 @@ function draw(seconds) {
     gl.bindVertexArray(geom.vao)
 
     gl.uniform4fv(program.uniforms.color, IlliniOrange)
-
+    gl.uniform4fv(program.uniforms.fogColor, IlliniBlue)
+    gl.uniform1f(program.uniforms.fogStrength, fogStrength)
    // > Handle matrix creation
 
    
@@ -170,7 +176,45 @@ function draw(seconds) {
     ]
         eye_f = m3mul(curR, eye_f)
     }
+    // > fogHandling - - - 
+    if(keysBeingPressed['f']){
+        // > check fog on value
+        if(!fLock){
+            if(fogOnFlag){
+                // save prev fog value
+                oldFogStrength = fogStrength
+                fogStrength = 0 ;
+            } else{
+                fogStrength = oldFogStrength
+            }
 
+            fogOnFlag = !fogOnFlag ; // > Set to the other one that it is not
+            fLock = 1 ; 
+        }
+
+        
+    }
+
+    //  > Handle g and  f only taking in one key press at a time
+     
+     if(keysBeingPressed['g']){
+        if(!gLock){
+        fogStrength = fogStrength * 0.8 ; 
+        gLock = 1; 
+        }
+        
+    }
+    
+    if(keysBeingPressed['h']){
+        if(!hLock){
+        fogStrength = fogStrength * 1.25 ; 
+        hLock = 1 ; 
+        }
+    }
+    // > make sure can only be pressed once
+    if(!keysBeingPressed['h']){hLock = 0  ; }
+    if(!keysBeingPressed['g']){gLock = 0 ; }
+    if(!keysBeingPressed['f']){fLock = 0 ; }
 
    // > End reposition eye based on user input
 }
