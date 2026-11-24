@@ -1,143 +1,4 @@
-
-// > Test Models - - - 
-var tetrahedron =
-    {"triangles":
-        [4,5,6
-        ,1,2,3
-        ,2,3,0
-        ,3,0,1
-        ]
-    ,"attributes":
-        [ // position
-            [[-0.5,-0.5,-0.5]
-            ,[ 0.5, 0.5,-0.5]
-            ,[-0.5, 0.5, 0.5]
-            ,[ 0.5,-0.5, 0.5]
-            ,[-0.5,-0.5,-0.5]
-            ,[ 0.5, 0.5,-0.5]
-            ,[-0.5, 0.5, 0.5]
-            ]
-        , // color
-            [[0,0,0]
-            ,[1,1,1]
-            ,[0,1,0]
-            ,[1,0,1]
-            ,[0,0,1]
-            ,[0,1,1]
-            ,[1,0,1]
-            ]
-        ]
-    }
-
-var unitGridTest = 
-    {"triangles":
-        [0,1,2
-        ,1,2,3
-
-        ]
-    ,"attributes":
-        [ // position
-            [[-1,-1,0 ] 
-            ,[ 1, -1,0]
-            ,[-1, 1,0 ]
-            ,[ 1,1,0  ]
-            ]
-            , // color
-            [
-             [0,0,0]
-            ,[1,1,1]
-            ,[0,1,0]
-            ,[1,0,1]
-            ]
-        ]
-    }
-
-var oct = {"triangles":
-        [[0,1,2]
-            , [0,2,3]
-            , [0,3,4]
-            , [0,4,1]
-            , [5,1,4]
-            , [5,4,3]
-            , [5,3,2]
-            , [5,2,1]
-        ]
-    ,"attributes":
-        [ // position
-            [[1,0,0]
-            ,[0,1,0]
-            ,[0,0,1]
-            ,[0,-1,0]
-            ,[0,0,-1]
-            ,[-1,0,0]
-            ]      
-            , // color
-            [[0,0,0]
-            ,[1,1,1]
-            ,[0,1,0]
-            ,[1,0,1]
-            ,[0,0,1]
-            ,[0,1,1]
-            ]
-        ]
-    }
-
-    
-
-    var tet =
-    {"triangles":
-        [4,5,6
-        ,1,2,3
-        ,2,3,0
-        ,3,0,1
-        ]
-    ,"attributes":
-        [ // position
-            [[-0.5,-0.5,-0.5]
-            ,[ 0.5, 0.5,-0.5]
-            ,[-0.5, 0.5, 0.5]
-            ,[ 0.5,-0.5, 0.5]
-            ,[-0.5,-0.5,-0.5]
-            ,[ 0.5, 0.5,-0.5]
-            ,[-0.5, 0.5, 0.5]
-            ]
-        , // color
-            [[0,0,0]
-            ,[1,1,1]
-            ,[0,1,0]
-            ,[1,0,1]
-            ,[0,0,1]
-            ,[0,1,1]
-            ,[1,0,1]
-            ]
-        ]
-    }
-
-
-    var unitGridTest2 = 
-    {"triangles":
-        [0,1,2
-        ,1,2,3
-
-        ]
-    ,"attributes":
-        [ // position
-            [[-1,-1,0 ] 
-            ,[ 1, -1,0]
-            ,[-1, 1,0 ]
-            ,[ 1,1,0 ]
-            ]
-            , // color
-            [
-             [0,0,0]
-            ,[1,1,1]
-            ,[0,1,0]
-            ,[1,0,-2]
-            ]
-        ]
-    }
-
-    // > Function for generating grid of gridsize
+ // > Function for generating grid of gridsize
     function makeGrid(gridSize){
         let n = gridSize ;
         // create grid object
@@ -266,3 +127,66 @@ var oct = {"triangles":
     }
 
 
+function applyWeathering(smoothingFactor) {
+    let s = smoothingFactor ; 
+
+    // > Note - should this be a destructive process - eg we can't "unweather?"
+    // > Yes, averaging is a fundamentally destructive operation, also note I will need to make a terrain copy
+    // > No, we should keep a copy of the original, non weathered grid, but only make the weathered one
+
+    // > Ok terrainWeathered is currently a structed clone of our terrain object - - -
+    console.log(s)
+    // > We now need to go through every vertex of our normal terrain and apply weathering to terrain
+    let n = terrainObj.attributes[0].length // > gridsize squared
+    let sz = Math.sqrt(n) ; // > Should give us the size of our actual grid
+
+    if(smoothingFactor = 0 ){ // > Return to unweathered terrain
+        terrainWeathered = structuredClone(terrainObj) //!! This whole block might be unecessary - - -
+        return ; // > Who care tho, if causes issues / doesn't change operation in the future I will get rid of it
+    }
+
+    // > Repeat smoothing smoothingFactor number of times
+    for(let i = 0 ; i < s ; i += 1) {
+        let prevTerrain = structuredClone(terrainWeathered) // > Get a structured clone to index, then modify current terrainWeathered
+        for(let curRow = 0 ; curRow < sz ; curRow += 1){
+            for(let curCol = 0 ; curCol < sz ; curCol += 1){
+                // > Get values of current and surrdouning vertices
+                let curV = prevTerrain.attributes[0][curCol + sz*curRow] ;
+                
+                // > Now get other indices
+                
+                // Right
+                let sum = 0 ; 
+                let validV = 0 ; 
+                if(curCol < 49){
+                    validV += 1 ;
+                    sum += prevTerrain.attributes[0][curCol + 1 + sz*curRow][2] ;
+                }
+                // Left
+                if(curCol > 0 ){
+                    validV += 1 ; 
+                    sum += prevTerrain.attributes[0][curCol -1 + sz*curRow][2] ;
+                }
+
+                // Up
+                if(curRow > 0){
+                    validV += 1 ; 
+                    sum += prevTerrain.attributes[0][curCol + sz*(curRow  - 1)][2] ;
+
+                }
+
+                // Down
+                if(curRow < 49){
+                    validV += 1 ; 
+                    sum += prevTerrain.attributes[0][curCol + sz*(curRow  + 1)][2] ;
+
+                }
+                // > Get adjacent average 
+                let adjAv = sum / validV
+                let newVal = (adjAv + curV[2]) / 2
+                terrainWeathered.attributes[0][curCol + sz*curRow][2] = newVal ; 
+            }
+        }
+        
+    }
+}

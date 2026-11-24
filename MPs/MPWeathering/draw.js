@@ -1,9 +1,4 @@
-/** Draw one frame */
-// TESTING
 
-
-
-// TESTING END
 
 
 function draw(seconds) {
@@ -156,10 +151,12 @@ window.addEventListener('load', async (event) => {
 
     window.gridObj = makeGrid(2) ; // > Make base grid - - -
     window.terrainObj = makeTerrain(0)
+    window.terrainWeathered = structuredClone(terrainObj) ; // > Clone our beautiful  terrain object
     // > Test adding in query selector here - - -
     document.querySelector('#submit').addEventListener('click', event => {
     const gridsize = Number(document.querySelector('#gridsize').value) || 2
     const faults = Number(document.querySelector('#faults').value) || 0
+    const weathering = Number(document.querySelector('#weathering').value)
     // TO DO: generate a new gridsize-by-gridsize grid here, then apply faults to it
        // console.log(gridsize) ; // > !!DEBUG!!
        gridObj = makeGrid(gridsize) ; 
@@ -168,8 +165,10 @@ window.addEventListener('load', async (event) => {
 
        // > Now begin taking in number of faults
        terrainObj = makeTerrain(faults) ;
-       addNormals(terrainObj) // test
-       window.geom = setupGeometry(terrainObj);   // debugging!!
+       terrainWeathered = structuredClone(terrainObj) ;
+       applyWeathering(weathering) ;  // > Just apply weathing directly to terrain
+       addNormals(terrainWeathered) // test
+       window.geom = setupGeometry(terrainWeathered);   // debugging!!
        
     })
 
@@ -184,7 +183,7 @@ window.addEventListener('load', async (event) => {
     
     //window.geom = setupGeometry(unitGridTest2)  ; // Testing
 
-    window.geom = setupGeometry(terrainObj)  ;
+    window.geom = setupGeometry(terrainWeathered)  ;
    
     
     fillScreen()
