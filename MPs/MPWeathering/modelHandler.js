@@ -155,28 +155,28 @@ function applyWeathering(smoothingFactor) {
                 
                 // > Now get other indices
                 
-                // Right
+                // > Right
                 let sum = 0 ; 
                 let validV = 0 ; 
-                if(curCol < 49){
+                if(curCol < sz - 1){
                     validV += 1 ;
                     sum += prevTerrain.attributes[0][curCol + 1 + sz*curRow][2] ;
                 }
-                // Left
+                // > Left
                 if(curCol > 0 ){
                     validV += 1 ; 
                     sum += prevTerrain.attributes[0][curCol -1 + sz*curRow][2] ;
                 }
 
-                // Up
+                // > Up
                 if(curRow > 0){
                     validV += 1 ; 
                     sum += prevTerrain.attributes[0][curCol + sz*(curRow  - 1)][2] ;
 
                 }
 
-                // Down
-                if(curRow < 49){
+                // > Down
+                if(curRow < sz - 1){
                     validV += 1 ; 
                     sum += prevTerrain.attributes[0][curCol + sz*(curRow  + 1)][2] ;
 
