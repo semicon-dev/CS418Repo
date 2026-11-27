@@ -98,8 +98,8 @@ function addNormals(geom) {
         let p0 = geom.attributes[0][geom.triangles[i][0]]
         let p1 = geom.attributes[0][geom.triangles[i][1]]
         let p2 = geom.attributes[0][geom.triangles[i][2]]
-        console.log("points")
-        console.log(p0, p1, p2) ; 
+        // console.log("points")
+        // console.log(p0, p1, p2) ; 
         let e1 = sub(p1,p0)
         let e2 = sub(p2,p0)
         let n = cross(e1,e2)
@@ -131,7 +131,7 @@ window.addEventListener('load', async (event) => {
     console.log("Calling parseObject")
     
     // let geometry = parseObject(objPath) // THIS DOES NOT WORK! Must keep async stuff in check
-    parseObject(objPath).then(geometry => {
+    parseObject2(objPath).then(geometry => {
         addNormals(geometry)
         window.geom = setupGeometry(geometry)
     })
@@ -152,13 +152,13 @@ window.addEventListener('load', async (event) => {
     gl.enable(gl.BLEND)
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
     
-   // let monkey = await fetch('monkey.json').then(res => res.json())
+    let monkey = await fetch('monkey.json').then(res => res.json())
    // > We need to figure out how to load a normal object in js, not just monkey
-    let monkey = octCol // > Ok so, the issue looks to be with how the tetrahedron is defined
+    // let monkey = octCol // > Ok so, the issue looks to be with how the tetrahedron is defined
     // loading it in is fine, but the nromals don't quire work
-   addNormals(monkey) // test
-    window.geom = setupGeometry(monkey);  
-   
+    addNormals(monkey) // test
+     window.geom = setupGeometry(monkey);  
+ 
     
     fillScreen()
     window.addEventListener('resize', fillScreen)
