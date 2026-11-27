@@ -1,4 +1,4 @@
-
+window.globColorFlag = false ; 
 
 
 function draw(seconds) {
@@ -8,7 +8,11 @@ function draw(seconds) {
 
     gl.bindVertexArray(geom.vao)
 
-    gl.uniform4fv(program.uniforms.color, IlliniOrange)
+    if(globColorFlag === false){
+        gl.uniform4fv(program.uniforms.color, IlliniOrange)
+    } else{
+        gl.uniform4fv(program.uniforms.color, geom.attributes[1])
+    }
 
 
 

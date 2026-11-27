@@ -154,7 +154,12 @@ var oct = {"triangles":
             "triangles" : [] // > Push 3 vertex num vectors here
             ,"attributes" : [[]] // > Push 3 element positions here // >attributes must be 2d
         }  // This double thing is IMPERATIVE to eventualy add normals as an attribute
-        obj.attributes[0].push([0,0,0])
+        obj.attributes[0].push([0,0,0]) // vertices
+        obj.attributes.push([])
+        obj.attributes[1].push([0,0,0]) // > always add colors
+
+       // > Need this for colors obj.attributes.push([]) // > For colors
+        // obj.attributes[0].push([0,0,0]) // colors
         // Ok we have the fileData in, write the shitass parser - - -
         let fileData = await fetch(filePath).then(r => r.text())
         // > lets check if we can parse this like a string
@@ -163,6 +168,8 @@ var oct = {"triangles":
        //  console.log(lineNumber)
         // > Loop over each lines - - - 
         
+        // > Note we may need to set colors
+        let colorSet = false ;
         for(let i = 0 ; i < lineNumber ; i += 1){
             let curChar = lines[i][0] // > get first char
             
@@ -170,29 +177,47 @@ var oct = {"triangles":
             let lItems = lines[i].split(/\s+/) // > way easier than manaul parsing - line items
             
             // > Add more conditionals as we expand this - - -
-            if(lItems[0] === "v"){ // > vertex 
-                // > Push back to attributes
-                // > Need to add NaN check here
-                let tempArr = []
-                for(let k = 1 ; k < lItems.length ; k += 1){
-                    if(lItems[k] != " "){
-                        tempArr.push(Number(lItems[k]))
-                    }
-                }
-                obj.attributes[0].push(tempArr)
-                
-            }
+            // > Handle vertices
 
+            // > Note we may need to setcolor
+            
+            if(lItems[0] === "v"){ // > vertex 
+                // > Check if object has coloring
+                // > Push back to attributes
+                // > Check if we have colors
+                
+                
+                let tempArr = []
+                    for(let k = 1 ; k < lItems.length ; k += 1){
+                        if(lItems[k] != ""){ // > Skip white space directive
+                            tempArr.push(Number(lItems[k]))
+                        }
+                    }
+
+                    obj.attributes[0].push([tempArr[0], tempArr[1], tempArr[2]]) // > Vrtices push
+
+                 // case colors
+                if(tempArr > 3){
+                    colorSet = true
+                    obj.attributes[1].push([tempArr[3], tempArr[4], tempArr[5]])
+                } else{
+                    obj.attributes[1].push([0.7, 0.7, 0.7])// > Push this color here
+                }
+            }
+        
+
+            // > Handle faces
             if(lItems[0] === "f"){ // > Faces
                 let tempArr = []
                 for(let k = 1 ; k < lItems.length ; k += 1){
-                    if(lItems[k] != " "){
+                    if(lItems[k] != ""){
                         tempArr.push(Number(lItems[k]))
                     }
                 }
                 obj.triangles.push(tempArr)
             }
         }
+    
         // console.log(obj.triangles)
         // console.log(obj.attributes)
         // console.log(obj.attributes.length)
@@ -224,8 +249,10 @@ var oct = {"triangles":
         }
         for(let i = 1 ; i <obj.attributes[0].length ; i += 1){
             obj.attributes[0][i] = div(obj.attributes[0][i], maxDist)
+            obj.attributes[0][i] = mul(obj.attributes[0][i], 2)
         }
 
+        globColorFlag = colorSet ;
         return obj ;
     }
 

@@ -1,6 +1,7 @@
 #version 300 es
 precision highp float;
-uniform vec4 color;
+// uniform vec4 color;
+
 
 
 uniform vec3 lightdir ; // Direction to the light
@@ -12,6 +13,7 @@ out vec4 fragColor;
 in vec3 vnormal ; 
 in vec4 testColor ;
 in vec3 position_to_frag ; 
+in vec4 color ;
 
 void main() {
     // > Calculate local halfway - - -

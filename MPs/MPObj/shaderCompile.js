@@ -1,5 +1,5 @@
 const IlliniBlue = new Float32Array([1, 1, 1, 1])
-const IlliniOrange = new Float32Array([0.9, 0.5, 0.3, 1.0])
+const IlliniOrange = new Float32Array([0.6, 0.6, 0.6, 1.0])
 const IdentityMatrix = new Float32Array([1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1])
 
 /**
