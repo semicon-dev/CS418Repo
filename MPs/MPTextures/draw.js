@@ -169,7 +169,7 @@ window.addEventListener('load', async (event) => {
 
        // > Now begin taking in number of faults
        terrainObj = makeTerrain(faults) ;
-       addNormals(terrainObj) // test
+       addNormals(terrainObj) 
        addTexcoord(terrainObj)
        window.geom = setupGeometry(terrainObj);   // debugging!!
        

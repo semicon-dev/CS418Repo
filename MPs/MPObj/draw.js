@@ -13,12 +13,14 @@ function draw(seconds) {
 
 
 
-    let eye_position = [3 * Math.cos(seconds * .4), 1.25, 3 * Math.sin(seconds * .4)] // > Eye position in world coords
+    // let eye_position = [3 * Math.cos(seconds * .4), 1.25, 3 * Math.sin(seconds * .4)] // > Eye position in world coords
+    let eye_position = [3, 1.25, 3] // > Eye position in world coords
     gl.uniform3fv(program.uniforms.eye_position, eye_position)
     // > NOTE!! We will need to rotate this eye position vector ( DONE!)
 
     // Create model matrix and position or model correctly within space
     let MM = m4rotX(-Math.PI/2) ; // Model matrix to rotate our terrain slightly
+    MM = m4mul(m4rotY((seconds * 0.7)), MM) ;
     gl.uniformMatrix4fv(program.uniforms.MM, false, MM)
 
     // > Create view matrix 
@@ -91,6 +93,8 @@ function addNormals(geom) {
         let p0 = geom.attributes[0][geom.triangles[i][0]]
         let p1 = geom.attributes[0][geom.triangles[i][1]]
         let p2 = geom.attributes[0][geom.triangles[i][2]]
+        console.log("points")
+        console.log(p0, p1, p2) ; 
         let e1 = sub(p1,p0)
         let e2 = sub(p2,p0)
         let n = cross(e1,e2)
@@ -114,11 +118,22 @@ window.addEventListener('load', async (event) => {
 
     // > Test adding in query selector here - - -
     document.querySelector('#submit').addEventListener('click', event => {
-    const objPath = Number(document.querySelector('#filePathIn').value) || ""
-    const imgPatj = Number(document.querySelector('#imagePathIn').value) || ""
+    const objPath = String(document.querySelector('#filePathIn').value) || "" 
+    const imgPath = String(document.querySelector('#imagePathIn').value) || ""
 
 
        // > Note : here is probably the place to update the actual geometry
+    console.log("Calling parseObject")
+    
+    // let geometry = parseObject(objPath) // THIS DOES NOT WORK! Must keep async stuff in check
+    parseObject(objPath).then(geometry => {
+        addNormals(geometry)
+        window.geom = setupGeometry(geometry)
+    })
+    
+    
+   
+    
       
        
     })
@@ -132,9 +147,12 @@ window.addEventListener('load', async (event) => {
     gl.enable(gl.BLEND)
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
     
-    let monkey = await fetch('monkey.json').then(res => res.json())
-    addNormals(monkey) // test
-    window.geom = setupGeometry(monkey);   // debugging!!
+   // let monkey = await fetch('monkey.json').then(res => res.json())
+   // > We need to figure out how to load a normal object in js, not just monkey
+    let monkey = oct // > Ok so, the issue looks to be with how the tetrahedron is defined
+    // loading it in is fine, but the nromals don't quire work
+   addNormals(monkey) // test
+    window.geom = setupGeometry(monkey);  
    
     
     fillScreen()
