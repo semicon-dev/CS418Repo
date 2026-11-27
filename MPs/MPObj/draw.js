@@ -7,12 +7,13 @@ function draw(seconds) {
     gl.useProgram(program)
 
     gl.bindVertexArray(geom.vao)
+    gl.bindVertexArray
 
-    if(globColorFlag === false){
-        gl.uniform4fv(program.uniforms.color, IlliniOrange)
-    } else{
-        gl.uniform4fv(program.uniforms.color, geom.attributes[1])
-    }
+    // if(globColorFlag === false){
+    //     gl.uniform4fv(program.uniforms.color, IlliniOrange)
+    // } else{
+    //     gl.uniform4fv(program.uniforms.color, geom.attributes[1])
+    // }
 
 
 
@@ -153,7 +154,7 @@ window.addEventListener('load', async (event) => {
     
    // let monkey = await fetch('monkey.json').then(res => res.json())
    // > We need to figure out how to load a normal object in js, not just monkey
-    let monkey = oct // > Ok so, the issue looks to be with how the tetrahedron is defined
+    let monkey = octCol // > Ok so, the issue looks to be with how the tetrahedron is defined
     // loading it in is fine, but the nromals don't quire work
    addNormals(monkey) // test
     window.geom = setupGeometry(monkey);  

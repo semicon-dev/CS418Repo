@@ -197,11 +197,11 @@ var oct = {"triangles":
                     obj.attributes[0].push([tempArr[0], tempArr[1], tempArr[2]]) // > Vrtices push
 
                  // case colors
-                if(tempArr > 3){
+                if(tempArr.length > 4){
                     colorSet = true
                     obj.attributes[1].push([tempArr[3], tempArr[4], tempArr[5]])
                 } else{
-                    obj.attributes[1].push([0.7, 0.7, 0.7])// > Push this color here
+                    obj.attributes[1].push([0.7, 0.9, 0.7])// > Push this color here
                 }
             }
         
