@@ -125,7 +125,7 @@ window.addEventListener('load', async (event) => {
 
     // > Check if png or jpeg
         if(((imgPath.substring(strLen - 4, strLen) == ".png") 
-            || (imgPath.substring(strLen - 5, strLen) == ".jpeg")) && (globTextureFlag === true)){
+            || (imgPath.substring(strLen - 5, strLen) == ".jpeg"))){ // && (globTextureFlag === true ? - nope, against assignment specifications
         console.log("That is a png or jpeg") // debugging
         img.crossOrigin = 'anonymous' // > Whatever that even means
         img.src = imgPath ; // >take local file as the image URL
