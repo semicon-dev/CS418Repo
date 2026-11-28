@@ -11,7 +11,6 @@ uniform vec3 eye_position ; // current position of the eye (time varying)
 
 out vec4 fragColor;
 in vec3 vnormal ; 
-in vec4 testColor ;
 in vec3 position_to_frag ; 
 in vec4 color ;
 

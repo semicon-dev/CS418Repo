@@ -1,6 +1,8 @@
 window.globColorFlag = false ; 
 window.globTextureFlag = false ;
 window.globNormalFlag = false ; 
+window.texShaderOn = false ; 
+window.img = new Image() ; // > Declare that this thing exists
 
 function draw(seconds) {
     gl.clearColor(...IlliniBlue) // f(...[1,2,3]) means f(1,2,3)
@@ -10,11 +12,12 @@ function draw(seconds) {
     gl.bindVertexArray(geom.vao)
     gl.bindVertexArray
 
-    // if(globColorFlag === false){
-    //     gl.uniform4fv(program.uniforms.color, IlliniOrange)
-    // } else{
-    //     gl.uniform4fv(program.uniforms.color, geom.attributes[1])
-    // }
+
+    // > Do texture stuff here? !!
+    if(texShaderOn == true){
+        let slot = 0 ; 
+        gl.uniform1i(program.uniforms.currentTexture, slot)
+    }
 
 
 
@@ -117,20 +120,71 @@ window.addEventListener('load', async (event) => {
       if(!globNormalFlag){ addNormals(geometry)}
         window.geom = setupGeometry(geometry)
     })
-    // > Now handle texture stuff
-    
-    
-   
-    
-      
-       
+    // > Now handle texture stuff - - - also on submit, no "change" thing like in the textures mp
+    let strLen = imgPath.length ;
+
+    // > Check if png or jpeg
+        if(((imgPath.substring(strLen - 4, strLen) == ".png") 
+            || (imgPath.substring(strLen - 5, strLen) == ".jpeg")) && (globTextureFlag === true)){
+        console.log("That is a png or jpeg") // debugging
+        img.crossOrigin = 'anonymous' // > Whatever that even means
+        img.src = imgPath ; // >take local file as the image URL
+        img.addEventListener('error', (event) =>{ // > Error if the png isnt correct
+            // > !! ADD CHANGE HERE TO "HOT SWAP" TO NON TEXTURE SHADER PROGRAM
+            window.program = compileShader(vs,fs) // swap shader for notex
+            texShaderOn = false ; 
+        })
+        img.addEventListener('load', (event) =>{ // > Success of loader
+            //swap shader to texture shader
+            window.program = compileShader(vs,fs_tex)
+            texShaderOn = true ;
+            // > Now we just need to write the shader and send this puppy to the GPU
+            let slot = 0 ;
+            let texture = gl.createTexture()
+            gl.activeTexture(gl.TEXTURE0 + slot) ;
+            gl.bindTexture(gl.TEXTURE_2D, texture) ;
+
+            // CLAMPING
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+            // Zooming in and Zooming out
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+            // Send pixel data to gpu
+            gl.texImage2D(
+                gl.TEXTURE_2D, //dest slot
+                0, // mipmap level,
+                gl.RGBA, 
+                gl.RGBA, 
+                gl.UNSIGNED_BYTE, 
+                img, // SOURCE DATA< PROVIDED AS A WINDOW
+            ) ;
+            gl.generateMipmap(gl.TEXTURE_2D)
+
+
+        })
+
+
+       } else {
+        window.program = compileShader(vs,fs) // swap shader here??!!
+        texShaderOn = false ;
+       }
+
+
     })
+    
+
+
+
+
 
     // > End test query selector add
 
     let vs = await fetch('vx.glsl').then(r => r.text())
     let fs = await fetch('fr.glsl').then(r => r.text())
+    let fs_tex = await fetch('fr_tex.glsl').then(r => r.text())
     window.program = compileShader(vs,fs)
+    texShaderOn = false
     gl.enable(gl.DEPTH_TEST)
     gl.enable(gl.BLEND)
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
