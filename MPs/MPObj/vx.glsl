@@ -1,7 +1,9 @@
 #version 300 es
 layout(location=0) in vec4 position;
 layout(location=1) in vec3 colors ; 
-layout(location=2) in vec3 normal ;
+layout(location=2) in vec2 texture ;
+layout(location=3) in vec3 normal ;
+layout(location=4) in vec3 test ; // > debugging
 uniform mat4 MM ; // > Model Matrix
 uniform mat4 VM ; // > View Matrix
 uniform mat4 p ;

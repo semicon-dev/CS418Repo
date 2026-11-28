@@ -5,7 +5,7 @@
 // Yes, I was basically overwriting the consants because I made the name constant and not the actual data inside of the array
 const baseColor = new Float32Array([1, 1, 1, 0.3])
 const errorColor = new Float32Array([1, 0, 1, 0])
-window.curColor = baseColor.slice()
+window.curColor = baseColor.slice() // > Genuinely don't remember what this does
 window.img = new Image() ; // > Declare that this thing exists
 window.texShaderOn = 0 ; // I am using a flag here because I barely understand this code
 // END GLOBALS

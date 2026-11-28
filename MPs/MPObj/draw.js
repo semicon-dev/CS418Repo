@@ -1,5 +1,6 @@
 window.globColorFlag = false ; 
-
+window.globTextureFlag = false ;
+window.globNormalFlag = false ; 
 
 function draw(seconds) {
     gl.clearColor(...IlliniBlue) // f(...[1,2,3]) means f(1,2,3)
@@ -47,21 +48,7 @@ function draw(seconds) {
 
 }
 
-// old view coord stuff - - -
-//   //let m = m4mul(m4rotY(seconds * (1/5)), m4rotX(-Math.PI/2))
-//     let m = m4rotX(-Math.PI/2) ;
-//     let v = m4view([1,1.5 ,3], [0,0,0], [0,1,0])
-//     gl.uniformMatrix4fv(program.uniforms.mv, false, m4mul(v,m))
-//     gl.uniformMatrix4fv(program.uniforms.p, false, p)
 
-//     // > Source 1
-//     let ld = normalize([1,3,1]) ;
-//     let h = normalize(add(ld, [0,0,1])) // We are always looking down the z axis
-//     gl.uniform3fv(program.uniforms.lightdir, ld)
-//     gl.uniform3fv(program.uniforms.lightcolor, ([1,1,1]))
-//     gl.uniform3fv(program.uniforms.halfway, h)
-    
-//     gl.drawElements(geom.mode, geom.count, geom.type, 0)
 
 
 /** Compute any time-varying or animated aspects of the scene */
@@ -89,17 +76,12 @@ function fillScreen() {
 }
 
 function addNormals(geom) {
-    let ni = geom.attributes.length
-    geom.attributes.push([])
-    for(let i = 0; i < geom.attributes[0].length; i+=1) {
-        geom.attributes[ni].push([0,0,0])
-    }
+    let ni = 3
+   
     for(let i = 0; i < geom.triangles.length; i+=1) {
         let p0 = geom.attributes[0][geom.triangles[i][0]]
         let p1 = geom.attributes[0][geom.triangles[i][1]]
         let p2 = geom.attributes[0][geom.triangles[i][2]]
-        // console.log("points")
-        // console.log(p0, p1, p2) ; 
         let e1 = sub(p1,p0)
         let e2 = sub(p2,p0)
         let n = cross(e1,e2)
@@ -132,9 +114,10 @@ window.addEventListener('load', async (event) => {
     
     // let geometry = parseObject(objPath) // THIS DOES NOT WORK! Must keep async stuff in check
     parseObject2(objPath).then(geometry => {
-        addNormals(geometry)
+      if(!globNormalFlag){ addNormals(geometry)}
         window.geom = setupGeometry(geometry)
     })
+    // > Now handle texture stuff
     
     
    
@@ -152,12 +135,12 @@ window.addEventListener('load', async (event) => {
     gl.enable(gl.BLEND)
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
     
-    let monkey = await fetch('monkey.json').then(res => res.json())
-   // > We need to figure out how to load a normal object in js, not just monkey
-    // let monkey = octCol // > Ok so, the issue looks to be with how the tetrahedron is defined
+    // let monkey = await fetch('monkey.json').then(res => res.json())
+   //// > We need to figure out how to load a normal object in js, not just monkey
+    let monkey = octCol // > Ok so, the issue looks to be with how the tetrahedron is defined
     // loading it in is fine, but the nromals don't quire work
     addNormals(monkey) // test
-     window.geom = setupGeometry(monkey);  
+    window.geom = setupGeometry(monkey);  
  
     
     fillScreen()
